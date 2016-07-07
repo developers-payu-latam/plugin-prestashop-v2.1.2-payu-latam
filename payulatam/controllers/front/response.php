@@ -173,5 +173,3 @@ class PayulatamResponseModuleFrontController extends ModuleFrontController
         $this->setTemplate('response.tpl');
     }
 }
-
-?>
