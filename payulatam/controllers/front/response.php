@@ -32,8 +32,8 @@ class PayulatamResponseModuleFrontController extends ModuleFrontController
         $this->context = Context::getContext();
 
         $payulatam = new PayuLatam();
-        
-        if (!in_array('signature', $_REQUEST))
+
+        if (isset($_REQUEST['signature']))
             $signature = $_REQUEST['signature'];
         else
             $signature = $_REQUEST['firma'];
