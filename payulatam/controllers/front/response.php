@@ -33,12 +33,8 @@ class PayulatamResponseModuleFrontController extends ModuleFrontController
 
         $payulatam = new PayuLatam();
 
-        
-        $payu_request_signature = Tools::getValue(($_REQUEST['signature']));
-        if (Tools::getIsset($payu_request_signature) and $payu_request_signature)
-            $signature = $payu_request_signature;
-        else
-            $signature = $_REQUEST['firma'];
+        if (isset($_REQUEST['signature'])) $signature = $_REQUEST['signature'];
+        else $signature = $_REQUEST['firma'];
 
         if (isset($_REQUEST['merchantId']))
             $merchant_id = $_REQUEST['merchantId'];
