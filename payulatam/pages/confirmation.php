@@ -33,36 +33,26 @@ $merchant_id = isset($_REQUEST['merchant_id']) ? $_REQUEST['merchant_id'] : $_RE
 
 $reference_code = isset($_REQUEST['reference_sale']) ? $_REQUEST['reference_sale'] : $_REQUEST['ref_venta'];
 
-if (isset($_REQUEST['value']))
-    $value = $_REQUEST['value'];
-else
-    $value = $_REQUEST['valor'];
+$value = isset($_REQUEST['value']) ? $_REQUEST['value'] : $_REQUEST['valor'];
 
-if (isset($_REQUEST['currency']))
-    $currency = $_REQUEST['currency'];
-else
-    $currency = $_REQUEST['moneda'];
+$currency = isset($_REQUEST['currency']) ? $_REQUEST['currency'] : $_REQUEST['moneda'];
 
-if (isset($_REQUEST['state_pol']))
-    $transaction_state = $_REQUEST['state_pol'];
-else
-    $transaction_state = $_REQUEST['estado_pol'];
+$transaction_state = isset($_REQUEST['state_pol']) ? $_REQUEST['state_pol'] : $_REQUEST['estado_pol'];
 
 
 $split = explode('.', $value);
 $decimals = $split[1];
-if ($decimals % 10 == 0)
+if ($decimals % 10 == 0) {
     $value = number_format($value, 1, '.', '');
+}
+
 
 $payulatam = new PayuLatam();
 $api_key = Configuration::get('PAYU_LATAM_API_KEY');
 $signature_local = $api_key . '~' . $merchant_id . '~' . $reference_code . '~' . $value . '~' . $currency . '~' . $transaction_state;
 $signature_md5 = md5($signature_local);
 
-if (isset($_REQUEST['response_code_pol']))
-    $pol_response_code = $_REQUEST['response_code_pol'];
-else
-    $pol_response_code = $_REQUEST['codigo_respuesta_pol'];
+$pol_response_code = isset($_REQUEST['response_code_pol']) ? $_REQUEST['response_code_pol'] : $_REQUEST['codigo_respuesta_pol'];
 
 $cart = new Cart((int)$reference_code);
 if (Tools::strtoupper($signature) == Tools::strtoupper($signature_md5)) {
