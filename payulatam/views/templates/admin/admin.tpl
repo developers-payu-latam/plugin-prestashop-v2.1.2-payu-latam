@@ -83,8 +83,8 @@
 
 	<div class="container_payu clearfix md_wrapper_gray">
 		{foreach from=$tab item=div}
-			<div id="{$div.tab|upper|escape:'htmlall':'UTF-8'}" class="{$div.style}">
-				{$div.content}
+			<div id="{html_entity_decode($div.tab|upper|escape:'htmlall':'UTF-8')}" class="{$div.style}">
+				{html_entity_decode($div.content)}
 			</div>
 		{/foreach}
 		<div class="clear"></div>
