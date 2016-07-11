@@ -46,7 +46,6 @@ if ($decimals % 10 == 0) {
     $value = number_format($value, 1, '.', '');
 }
 
-
 $payulatam = new PayuLatam();
 $api_key = Configuration::get('PAYU_LATAM_API_KEY');
 $signature_local = $api_key . '~' . $merchant_id . '~' . $reference_code . '~' . $value . '~' . $currency . '~' . $transaction_state;
@@ -58,22 +57,25 @@ $cart = new Cart((int)$reference_code);
 if (Tools::strtoupper($signature) == Tools::strtoupper($signature_md5)) {
     $state = 'PAYU_OS_FAILED';
     $errors = [];
-    if ($transaction_state == 6 && $pol_response_code == 5)
+    if ($transaction_state == 6 && $pol_response_code == 5) {
         $state = 'PAYU_OS_FAILED';
-    else if ($transaction_state == 6 && $pol_response_code == 4)
+    } else if ($transaction_state == 6 && $pol_response_code == 4) {
         $state = 'PAYU_OS_REJECTED';
-    else if ($transaction_state == 12 && $pol_response_code == 9994)
+    }
+    else if ($transaction_state == 12 && $pol_response_code == 9994) {
         $state = 'PAYU_OS_PENDING';
-    else if ($transaction_state == 4 && $pol_response_code == 1)
+    }
+    else if ($transaction_state == 4 && $pol_response_code == 1) {
         $state = 'PS_OS_PAYMENT';
+    }
 
-    if (!Validate::isLoadedObject($cart))
+    if (!Validate::isLoadedObject($cart)) {
         $errors[] = $this->module->l('Invalid Cart ID');
-    else {
+    } else {
         $currency_cart = new Currency((int)$cart->id_currency);
-        if ($currency != $currency_cart->iso_code)
+        if ($currency != $currency_cart->iso_code) {
             $errors[] = $this->module->l('Invalid Currency ID') . ' ' . ($currency . '|' . $currency_cart->iso_code);
-        else {
+        } else {
             if ($cart->orderExists()) {
                 $order = new Order((int)Order::getOrderByCartId($cart->id));
 
@@ -110,4 +112,3 @@ if (Tools::strtoupper($signature) == Tools::strtoupper($signature_md5)) {
         }
     }
 }
-?>
