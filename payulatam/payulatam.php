@@ -78,11 +78,9 @@ class PayuLatam extends PaymentModule
     {
         $this->_createStates();
 
-        if (!parent::install()
-            || !$this->registerHook('payment')
-            || !$this->registerHook('paymentReturn')
-        )
+        if (!parent::install() || !$this->registerHook('payment') || !$this->registerHook('paymentReturn')){
             return false;
+        }
         return true;
     }
 
@@ -91,8 +89,9 @@ class PayuLatam extends PaymentModule
         if (!Configuration::get('PAYU_OS_PENDING')) {
             $order_state = new OrderState();
             $order_state->name = array();
-            foreach (Language::getLanguages() as $language)
+            foreach (Language::getLanguages() as $language){
                 $order_state->name[$language['id_lang']] = 'Pending';
+            }
 
             $order_state->send_email = false;
             $order_state->color = '#FEFF64';
@@ -112,8 +111,9 @@ class PayuLatam extends PaymentModule
         if (!Configuration::get('PAYU_OS_FAILED')) {
             $order_state = new OrderState();
             $order_state->name = array();
-            foreach (Language::getLanguages() as $language)
+            foreach (Language::getLanguages() as $language) {
                 $order_state->name[$language['id_lang']] = 'Failed Payment';
+            }
 
             $order_state->send_email = false;
             $order_state->color = '#8F0621';
@@ -133,8 +133,9 @@ class PayuLatam extends PaymentModule
         if (!Configuration::get('PAYU_OS_REJECTED')) {
             $order_state = new OrderState();
             $order_state->name = array();
-            foreach (Language::getLanguages() as $language)
+            foreach (Language::getLanguages() as $language) {
                 $order_state->name[$language['id_lang']] = 'Rejected Payment';
+            }
 
             $order_state->send_email = false;
             $order_state->color = '#8F0621';
@@ -162,8 +163,9 @@ class PayuLatam extends PaymentModule
             || !Configuration::deleteByName('PAYU_OS_PENDING')
             || !Configuration::deleteByName('PAYU_OS_FAILED')
             || !Configuration::deleteByName('PAYU_OS_REJECTED')
-        )
+        ) {
             return false;
+        }
         return true;
     }
 
@@ -178,34 +180,32 @@ class PayuLatam extends PaymentModule
             if (!count($this->_postErrors)) {
                 $this->_saveConfiguration();
                 $html .= $this->displayConfirmation($this->l('Settings updated'));
-            } else
-                foreach ($this->_postErrors as $err)
+            } else {
+                foreach ($this->_postErrors as $err) {
                     $html .= $this->displayError($err);
+                }
+            }
         }
         return $html . $this->_displayAdminTpl();
     }
 
     private function _postValidation()
     {
-        if (!Validate::isCleanHtml(Tools::getValue('merchant_id'))
-            || !Validate::isGenericName(Tools::getValue('merchant_id'))
-        )
+        if (!Validate::isCleanHtml(Tools::getValue('merchant_id')) || !Validate::isGenericName(Tools::getValue('merchant_id'))){
             $this->_postErrors[] = $this->l('You must indicate the merchant id');
+        }
 
-        if (!Validate::isCleanHtml(Tools::getValue('account_id'))
-            || !Validate::isGenericName(Tools::getValue('account_id'))
-        )
+        if (!Validate::isCleanHtml(Tools::getValue('account_id')) || !Validate::isGenericName(Tools::getValue('account_id'))) {
             $this->_postErrors[] = $this->l('You must indicate the account id');
+        }
 
-        if (!Validate::isCleanHtml(Tools::getValue('api_key'))
-            || !Validate::isGenericName(Tools::getValue('api_key'))
-        )
+        if (!Validate::isCleanHtml(Tools::getValue('api_key')) || !Validate::isGenericName(Tools::getValue('api_key'))) {
             $this->_postErrors[] = $this->l('You must indicate the API key');
+        }
 
-        if (!Validate::isCleanHtml(Tools::getValue('test'))
-            || !Validate::isGenericName(Tools::getValue('test'))
-        )
+        if (!Validate::isCleanHtml(Tools::getValue('test')) || !Validate::isGenericName(Tools::getValue('test'))){
             $this->_postErrors[] = $this->l('You must indicate if the transaction mode is test or not');
+        }
 
     }
 
@@ -300,8 +300,10 @@ class PayuLatam extends PaymentModule
 
     public function hookPayment($params)
     {
-        if (!$this->active)
+        if ($this->active) {
+        } else {
             return;
+        }
 
         $this->context->smarty->assign(array(
             'css' => '../modules/payulatam/css/',
