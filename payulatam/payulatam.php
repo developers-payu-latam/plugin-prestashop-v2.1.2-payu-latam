@@ -25,8 +25,9 @@
 
 header('Content-type: text/plain; charset=utf-8');
 
-if (!defined('_PS_VERSION_'))
+if (!defined('_PS_VERSION_')) {
     exit;
+}
 
 class PayuLatam extends PaymentModule
 {
@@ -52,8 +53,9 @@ class PayuLatam extends PaymentModule
 
         $this->confirmUninstall = $this->l('Are you sure you want to uninstall?');
         /* Backward compatibility */
-        if (_PS_VERSION_ < '1.5')
+        if (_PS_VERSION_ < '1.5') {
             require(_PS_MODULE_DIR_ . $this->name . '/backward_compatibility/backward.php');
+        }
 
         $this->checkForUpdates();
     }
@@ -61,7 +63,7 @@ class PayuLatam extends PaymentModule
     private function checkForUpdates()
     {
         // Used by PrestaShop 1.3 & 1.4
-        if (version_compare(_PS_VERSION_, '1.5', '<') && self::isInstalled($this->name))
+        if (version_compare(_PS_VERSION_, '1.5', '<') && self::isInstalled($this->name)) {
             foreach (array('2.0') as $version) {
                 $file = dirname(__FILE__) . '/upgrade/upgrade-' . $version . '.php';
                 if (Configuration::get('PAYU_LATAM') < $version && file_exists($file)) {
@@ -69,6 +71,7 @@ class PayuLatam extends PaymentModule
                     call_user_func('upgrade_module_' . str_replace('.', '_', $version), $this);
                 }
             }
+        }
     }
 
     public function install()
@@ -308,5 +311,3 @@ class PayuLatam extends PaymentModule
         return $this->display(__FILE__, 'views/templates/hook/payulatam_payment.tpl');
     }
 }
-
-?>

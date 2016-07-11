@@ -23,8 +23,13 @@
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-if (!defined('_PS_VERSION_'))
+if (!defined('_PS_VERSION_')) {
     exit;
+}
+/**
+ * @param $object
+ * @return mixed
+ */
 function upgrade_module_2_0($object)
 {
     $upgrade_version = '2.0';
@@ -32,8 +37,5 @@ function upgrade_module_2_0($object)
 
     Configuration::updateValue('PAYU_LATAM', $upgrade_version);
 
-    return Db::getInstance()->execute(
-        'DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'payu_token`;');
+    return Db::getInstance()->execute('DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'payu_token`;');
 }
-
-?>

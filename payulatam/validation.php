@@ -39,8 +39,9 @@ $products = $cart->getProducts();
 $cart_details = $cart->getSummaryDetails(null, true);
 
 $description = '';
-foreach ($products as $product)
+foreach ($products as $product) {
     $description .= $product['name'] . ',';
+}
 
 $currency = new Currency((int)$cart->id_currency);
 
@@ -56,19 +57,12 @@ if (!Validate::isLoadedObject($customer) || !Validate::isLoadedObject($billing_a
     die('An unrecoverable error occured while retrieving you data');
 }
 
-$signature = md5(Configuration::get('PAYU_LATAM_API_KEY') . '~' . Configuration::get('PAYU_LATAM_MERCHANT_ID') . '~' . (int)$cart->id . '~' .
-    $cart->getordertotal(true) . '~' . $currency->iso_code);
+$signature = md5(Configuration::get('PAYU_LATAM_API_KEY') . '~' . Configuration::get('PAYU_LATAM_MERCHANT_ID') . '~' . (int)$cart->id . '~' . $cart->getordertotal(true) . '~' . $currency->iso_code);
 
-if ($cart_details['total_tax'] != 0)
-    $base = $cart_details['total_price_without_tax'] - $cart_details['total_shipping_tax_exc'];
-else
-    $base = 0;
+$base = $cart_details['total_tax'] != 0 ? $cart_details['total_price_without_tax'] - $cart_details['total_shipping_tax_exc'] : 0;
 
 if (Configuration::get('PS_SSL_ENABLED') || (!empty($_SERVER['HTTPS']) && Tools::strtolower($_SERVER['HTTPS']) != 'off')) {
-    if (method_exists('Tools', 'getShopDomainSsl'))
-        $url = 'https://' . Tools::getShopDomainSsl() . __PS_BASE_URI__ . '/modules/' . $payulatam->name . '/';
-    else
-        $url = 'https://' . $_SERVER['HTTP_HOST'] . __PS_BASE_URI__ . 'modules/' . $payulatam->name . '/';
+    $url = method_exists('Tools', 'getShopDomainSsl') ? 'https://' . Tools::getShopDomainSsl() . __PS_BASE_URI__ . '/modules/' . $payulatam->name . '/' : 'https://' . $_SERVER['HTTP_HOST'] . __PS_BASE_URI__ . 'modules/' . $payulatam->name . '/';
 } else
     $url = 'http://' . $_SERVER['HTTP_HOST'] . __PS_BASE_URI__ . '/modules/' . $payulatam->name . '/';
 
@@ -81,10 +75,11 @@ if (Configuration::get('PS_SSL_ENABLED') || (!empty($_SERVER['HTTPS']) && Tools:
 </center>
 
 <?php
-if (_PS_VERSION_ < '1.5')
+if (_PS_VERSION_ < '1.5') {
     $response_url = 'http://' . htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8') . __PS_BASE_URI__ . 'modules/payulatam/pages/response.php';
-else
+} else {
     $response_url = 'http://' . htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8') . __PS_BASE_URI__ . 'index.php?fc=module&module=payulatam&controller=response';
+}
 
 $confirmation_url = 'http://' . htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8') . __PS_BASE_URI__ .
     'modules/payulatam/pages/confirmation.php';
