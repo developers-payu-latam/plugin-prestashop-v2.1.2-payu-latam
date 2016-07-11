@@ -77,7 +77,7 @@ body { font-family: Arial, Helvetica, sans-serif ; color: #58595b;}
 
 }
 
-div.header_payu { background: url(../img/header.png) no-repeat right bottom #f6f6f6; overflow: auto;height:258px;}
+div.header_payu { background: url(../views/img/header.png) no-repeat right bottom #f6f6f6; overflow: auto;height:258px;}
 
 div.payu { margin: 15px 0;}
 
@@ -94,7 +94,7 @@ h2, h3, h4{-webkit-font-smoothing: antialiased;margin-bottom:0px;font-weight: no
 
 h2{font-family: 'amplesoft-regularregular';font-weight: normal;}
 
-.advice_payu h4{color:#ffffff;background:url('../img/alert.png') no-repeat 0px 0px;height:40px;padding-left:50px;padding-top:10px;font-size:18px; font-weight: normal; font-family: 'open_sansbold';margin-top:15px;}
+.advice_payu h4{color:#ffffff;background:url('../views/img/alert.png') no-repeat 0px 0px;height:40px;padding-left:50px;padding-top:10px;font-size:18px; font-weight: normal; font-family: 'open_sansbold';margin-top:15px;}
 
 p{font-size:13px;-webkit-font-smoothing: antialiased;}
 
@@ -109,7 +109,7 @@ a{color:#a6c307;}
 
 .advice{background:#4cc0ad; padding:3px 20px 10px 20px;color:#ffffff;}
 
-.advice h4{color:#ffffff;background:url('../img/alert.png') no-repeat 0px 0px;height:40px;padding-left:50px;padding-top:10px;font-size:18px; font-weight: normal;}
+.advice h4{color:#ffffff;background:url('../views/img/alert.png') no-repeat 0px 0px;height:40px;padding-left:50px;padding-top:10px;font-size:18px; font-weight: normal;}
 
 .logo-py { width: 148px; display:inline-block;}
 .md-copy_payu { padding: 0 15px; font-size: font-size:18px; line-height: 1.1em;font-family: 'amplesoft-regularregular';}
@@ -129,7 +129,7 @@ a{color:#a6c307;}
 
 .md-col_payu{padding:10px;}
 .md-col_payu h3 {color: #262626 ;font-size:1.3em;}
-.md-col_payu li { list-style-image: url("../img/bullet.png"); margin: 0 0 8px 0;}
+.md-col_payu li { list-style-image: url("../views/img/bullet.png"); margin: 0 0 8px 0;}
 .md-col_payu ul { margin: 0 15px 0px 0px; padding:  0 25px;}
 
 .form ul { padding-left: 0;}
@@ -144,7 +144,7 @@ a{color:#a6c307;}
 
 /*botones de accion*/
 
-.md-btn, .button-form_payu{ color: #FFF; text-align: center; padding: 18px 30px; border-radius: 40px; border: none; font-size: 15px;background: #a6c307; font-family: 'open_sansbold'; background-image:url(../img/arrow_button.png);background-position:90% center; background-repeat:no-repeat;  
+.md-btn, .button-form_payu{ color: #FFF; text-align: center; padding: 18px 30px; border-radius: 40px; border: none; font-size: 15px;background: #a6c307; font-family: 'open_sansbold'; background-image:url(../views/img/arrow_button.png);background-position:90% center; background-repeat:no-repeat;
 }
 .md-btn:hover .button-form_payu:hover { 
 	color: #FFF;
@@ -161,9 +161,9 @@ a{color:#a6c307;}
 
 .config_payu h3, .credentials_payu h3{color:#262626;font-size:24px;}
 
-.config_payu h3{background:url('../img/config.png') no-repeat 0px;height:40px;padding-left:45px;padding-top:5px;}
+.config_payu h3{background:url('../views/img/config.png') no-repeat 0px;height:40px;padding-left:45px;padding-top:5px;}
 
-.credentials_payu h3{background:url('../img/credentials.png') no-repeat 0px;height:40px;padding-left:45px;padding-top:5px;}
+.credentials_payu h3{background:url('../views/img/credentials.png') no-repeat 0px;height:40px;padding-left:45px;padding-top:5px;}
 
 .config_payu ol{padding:0px 25px 0px 25px;}
 
