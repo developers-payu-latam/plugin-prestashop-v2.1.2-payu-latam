@@ -113,4 +113,3 @@ if (Tools::strtoupper($signature) == Tools::strtoupper($signature_md5)) {
 }
 Context::getContext()->smarty->display(dirname(__FILE__) . '/../views/templates/front/response.tpl');
 include(dirname(__FILE__) . '/../../../footer.php');
-

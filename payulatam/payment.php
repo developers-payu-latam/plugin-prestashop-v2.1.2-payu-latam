@@ -54,8 +54,9 @@ class PayUController extends FrontController
     {
         $tax = (float)self::$cart->getOrderTotal() - (float)self::$cart->getOrderTotal(false);
         $base = (float)self::$cart->getOrderTotal(true, Cart::ONLY_PRODUCTS) + (float)self::$cart->getOrderTotal(true, Cart::ONLY_DISCOUNTS) - (float)$tax;
-        if ($tax == 0)
+        if ($tax == 0) {
             $base = 0;
+        }
 
         $currency = new Currency(self::$cart->id_currency);
 
@@ -65,8 +66,7 @@ class PayUController extends FrontController
 
         $ref = 'payU_' . Configuration::get('PS_SHOP_NAME') . '_' . (int)self::$cart->id;
 
-        $token = md5(Tools::safeOutput(Configuration::get('PAYU_API_KEY')) . '~' . Tools::safeOutput(Configuration::get('PAYU_MERCHANT_ID')) . '~' . $ref . '~'
-            . (float)self::$cart->getOrderTotal() . '~' . Tools::safeOutput($currency->iso_code));
+        $token = md5(Tools::safeOutput(Configuration::get('PAYU_API_KEY')) . '~' . Tools::safeOutput(Configuration::get('PAYU_MERCHANT_ID')) . '~' . $ref . '~' . (float)self::$cart->getOrderTotal() . '~' . Tools::safeOutput($currency->iso_code));
 
         $params = array(
             array('value' => (Configuration::get('PAYU_DEMO') == 'yes' ? 1 : 0), 'name' => 'test'),
@@ -86,9 +86,9 @@ class PayUController extends FrontController
             array('value' => 'http://' . htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8') . __PS_BASE_URI__ . 'modules/payulatam/validation.php', 'name' => 'confirmationUrl'),
         );
 
-        if (Configuration::get('PAYU_ACCOUNT_ID') != 0)
+        if (Configuration::get('PAYU_ACCOUNT_ID') != 0) {
             $params[] = array('value' => (int)Configuration::get('PAYU_ACCOUNT_ID'), 'name' => 'accountId');
-
+        }
         return $params;
     }
 
@@ -101,14 +101,14 @@ class PayUController extends FrontController
     public function createPendingOrder()
     {
         $payu = new PayULatam();
-        $payu->validateOrder((int)self::$cart->id, (int)Configuration::get('PAYU_WAITING_PAYMENT'), (float)self::$cart->getOrderTotal(),
-            $payu->displayName, null, array(), null, false, self::$cart->secure_key);
+        $payu->validateOrder((int)self::$cart->id, (int)Configuration::get('PAYU_WAITING_PAYMENT'), (float)self::$cart->getOrderTotal(), $payu->displayName, null, array(), null, false, self::$cart->secure_key);
     }
 }
 
 $payUController = new PayUController();
 
-if (Tools::getIsset(Tools::getValue('create-pending-order')))
+if (Tools::getIsset(Tools::getValue('create-pending-order'))) {
     $payUController->createPendingOrder();
-else
+} else {
     $payUController->run();
+}
