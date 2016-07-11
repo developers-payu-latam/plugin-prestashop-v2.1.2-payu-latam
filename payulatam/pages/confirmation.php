@@ -27,20 +27,11 @@ include(dirname(__FILE__) . '/../../../config/config.inc.php');
 include(dirname(__FILE__) . '/../../../init.php');
 include(dirname(__FILE__) . '/../payulatam.php');
 
-if (isset($_REQUEST['sign']))
-    $signature = $_REQUEST['sign'];
-else
-    $signature = $_REQUEST['firma'];
+$signature = isset($_REQUEST['sign']) ? $_REQUEST['sign'] : $_REQUEST['firma'];
 
-if (isset($_REQUEST['merchant_id']))
-    $merchant_id = $_REQUEST['merchant_id'];
-else
-    $merchant_id = $_REQUEST['usuario_id'];
+$merchant_id = isset($_REQUEST['merchant_id']) ? $_REQUEST['merchant_id'] : $_REQUEST['usuario_id'];
 
-if (isset($_REQUEST['reference_sale']))
-    $reference_code = $_REQUEST['reference_sale'];
-else
-    $reference_code = $_REQUEST['ref_venta'];
+$reference_code = isset($_REQUEST['reference_sale']) ? $_REQUEST['reference_sale'] : $_REQUEST['ref_venta'];
 
 if (isset($_REQUEST['value']))
     $value = $_REQUEST['value'];
