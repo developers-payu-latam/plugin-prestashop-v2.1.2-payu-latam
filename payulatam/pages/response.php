@@ -30,36 +30,17 @@ include(dirname(__FILE__) . '/../../../header.php');
 
 $payulatam = new PayuLatam();
 
-if (isset($_REQUEST['signature']))
-    $signature = $_REQUEST['signature'];
-else
-    $signature = $_REQUEST['firma'];
+$signature = isset($_REQUEST['signature']) ? $_REQUEST['signature'] : $_REQUEST['firma'];
 
-if (isset($_REQUEST['merchantId']))
-    $merchant_id = $_REQUEST['merchantId'];
-else
-    $merchant_id = $_REQUEST['usuario_id'];
+$merchant_id = isset($_REQUEST['merchantId']) ? $_REQUEST['merchantId'] : $_REQUEST['usuario_id'];
 
-if (isset($_REQUEST['referenceCode']))
-    $reference_code = $_REQUEST['referenceCode'];
-else
-    $reference_code = $_REQUEST['ref_venta'];
+$reference_code = isset($_REQUEST['referenceCode']) ? $_REQUEST['referenceCode'] : $_REQUEST['ref_venta'];
 
-if (isset($_REQUEST['TX_VALUE']))
-    $value = $_REQUEST['TX_VALUE'];
-else
-    $value = $_REQUEST['valor'];
+$value = isset($_REQUEST['TX_VALUE']) ? $_REQUEST['TX_VALUE'] : $_REQUEST['valor'];
 
-if (isset($_REQUEST['currency']))
+$currency = isset($_REQUEST['currency']) ? $_REQUEST['currency'] : $_REQUEST['moneda'];
 
-    $currency = $_REQUEST['currency'];
-else
-    $currency = $_REQUEST['moneda'];
-
-if (isset($_REQUEST['transactionState']))
-    $transaction_state = $_REQUEST['transactionState'];
-else
-    $transaction_state = $_REQUEST['estado'];
+$transaction_state = isset($_REQUEST['transactionState']) ? $_REQUEST['transactionState'] : $_REQUEST['estado'];
 
 $value = number_format($value, 1, '.', '');
 
@@ -67,54 +48,33 @@ $api_key = Configuration::get('PAYU_LATAM_API_KEY');
 $signature_local = $api_key . '~' . $merchant_id . '~' . $reference_code . '~' . $value . '~' . $currency . '~' . $transaction_state;
 $signature_md5 = md5($signature_local);
 
-if (isset($_REQUEST['polResponseCode']))
-    $pol_response_code = $_REQUEST['polResponseCode'];
-else
-    $pol_response_code = $_REQUEST['codigo_respuesta_pol'];
+$pol_response_code = isset($_REQUEST['polResponseCode']) ? $_REQUEST['polResponseCode'] : $_REQUEST['codigo_respuesta_pol'];
 
 $messageApproved = '';
-if ($transaction_state == 6 && $pol_response_code == 5)
+if ($transaction_state == 6 && $pol_response_code == 5) {
     $estado_tx = $payulatam->l('Failed Transaction');
-else if ($transaction_state == 6 && $pol_response_code == 4)
+} else if ($transaction_state == 6 && $pol_response_code == 4) {
     $estado_tx = $payulatam->l('Rejected Transaction');
-else if ($transaction_state == 12 && $pol_response_code == 9994)
+} else if ($transaction_state == 12 && $pol_response_code == 9994) {
     $estado_tx = $payulatam->l('Pending Transaction, Please check if the debit was made in the Bank');
-else if ($transaction_state == 4 && $pol_response_code == 1) {
+} else if ($transaction_state == 4 && $pol_response_code == 1) {
     $estado_tx = $payulatam->l('Transaction Approved');
     $messageApproved = $payulatam->l('¡Thank you for your purchase!');
 } else {
-    if (isset($_REQUEST['message']))
-        $estado_tx = $_REQUEST['message'];
-    else
-        $estado_tx = $_REQUEST['mensaje'];
+    $estado_tx = isset($_REQUEST['message']) ? $_REQUEST['message'] : $_REQUEST['mensaje'];
 }
 
-if (isset($_REQUEST['transactionId']))
-    $transaction_id = $_REQUEST['transactionId'];
-else
-    $transaction_id = $_REQUEST['transaccion_id'];
+$transaction_id = isset($_REQUEST['transactionId']) ? $_REQUEST['transactionId'] : $_REQUEST['transaccion_id'];
 
-if (isset($_REQUEST['reference_pol']))
-    $reference_pol = $_REQUEST['reference_pol'];
-else
-    $reference_pol = $_REQUEST['ref_pol'];
+$reference_pol = isset($_REQUEST['reference_pol']) ? $_REQUEST['reference_pol'] : $_REQUEST['ref_pol'];
 
-if (isset($_REQUEST['pseBank']))
-    $pse_bank = $_REQUEST['pseBank'];
-else
-    $pse_bank = $_REQUEST['banco_pse'];
+$pse_bank = isset($_REQUEST['pseBank']) ? $_REQUEST['pseBank'] : $_REQUEST['banco_pse'];
 
 $cus = $_REQUEST['cus'];
-if (isset($_REQUEST['description']))
-    $description = $_REQUEST['description'];
-else
-    $description = $_REQUEST['descripcion'];
 
-if (isset($_REQUEST['lapPaymentMethod']))
-    $lap_payment_method = $_REQUEST['lapPaymentMethod'];
-else
-    $lap_payment_method = $_REQUEST['medio_pago_lap'];
+$description = isset($_REQUEST['description']) ? $_REQUEST['description'] : $_REQUEST['descripcion'];
 
+$lap_payment_method = isset($_REQUEST['lapPaymentMethod']) ? $_REQUEST['lapPaymentMethod'] : $_REQUEST['medio_pago_lap'];
 
 $cart = new Cart((int)$reference_code);
 
@@ -153,4 +113,3 @@ if (Tools::strtoupper($signature) == Tools::strtoupper($signature_md5)) {
 }
 Context::getContext()->smarty->display(dirname(__FILE__) . '/../views/templates/front/response.tpl');
 include(dirname(__FILE__) . '/../../../footer.php');
-?>

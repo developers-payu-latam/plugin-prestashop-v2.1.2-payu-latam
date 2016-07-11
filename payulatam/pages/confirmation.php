@@ -61,11 +61,9 @@ if (Tools::strtoupper($signature) == Tools::strtoupper($signature_md5)) {
         $state = 'PAYU_OS_FAILED';
     } else if ($transaction_state == 6 && $pol_response_code == 4) {
         $state = 'PAYU_OS_REJECTED';
-    }
-    else if ($transaction_state == 12 && $pol_response_code == 9994) {
+    } else if ($transaction_state == 12 && $pol_response_code == 9994) {
         $state = 'PAYU_OS_PENDING';
-    }
-    else if ($transaction_state == 4 && $pol_response_code == 1) {
+    } else if ($transaction_state == 4 && $pol_response_code == 1) {
         $state = 'PS_OS_PAYMENT';
     }
 
@@ -106,8 +104,9 @@ if (Tools::strtoupper($signature) == Tools::strtoupper($signature_md5)) {
                 $order = new Order((int)Order::getOrderByCartId($cart->id));
             }
             if ($state != 'PS_OS_PAYMENT') {
-                foreach ($order->getProductsDetail() as $product)
+                foreach ($order->getProductsDetail() as $product) {
                     StockAvailable::updateQuantity($product['product_id'], $product['product_attribute_id'], +(int)$product['product_quantity'], $order->id_shop);
+                }
             }
         }
     }
