@@ -68,9 +68,8 @@ if (Tools::strtoupper($signature) == Tools::strtoupper($signature_md5)) {
     }
 
     if (!Validate::isLoadedObject($cart)) {
-        if (isset($errors)) {
-            $errors[] = $this->module->l('Invalid Cart ID');
-        }
+        $errors = Module::getInstanceByName('invalid cart id');
+        echo $errors->l('Invalid Cart ID');
     } else {
         $currency_cart = new Currency((int)$cart->id_currency);
         if ($currency != $currency_cart->iso_code) {
