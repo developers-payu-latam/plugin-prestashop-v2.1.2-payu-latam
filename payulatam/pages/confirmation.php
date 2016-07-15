@@ -73,7 +73,8 @@ if (Tools::strtoupper($signature) == Tools::strtoupper($signature_md5)) {
     } else {
         $currency_cart = new Currency((int)$cart->id_currency);
         if ($currency != $currency_cart->iso_code) {
-            $errors[] = $this->module->l('Invalid Currency ID') . ' ' . ($currency . '|' . $currency_cart->iso_code);
+            $errors = Module::getInstanceByName('invalid cart id');
+            echo $errors->l('Invalid Currency ID') . ' ' . ($currency . '|' . $currency_cart->iso_code);
         } else {
             if ($cart->orderExists()) {
                 $order = new Order((int)Order::getOrderByCartId($cart->id));
