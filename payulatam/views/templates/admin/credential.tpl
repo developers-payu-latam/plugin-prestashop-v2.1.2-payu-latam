@@ -29,7 +29,7 @@
 			<ul>
 				<li><label class="label_payu">{$input.label|escape:'htmlall':'UTF-8'}</label></li>
 				<li><input class="full input_payu" type="{$input.type|escape:'htmlall':'UTF-8'}" placeholder="{$input.label|escape:'htmlall':'UTF-8'}" id="{$input.name|escape:'htmlall':'UTF-8'}" name="{$input.name|escape:'htmlall':'UTF-8'}" value="{$input.value|escape:'htmlall':'UTF-8'}"/></li>
-				<li><span class="caption">{$input.desc}</span></li>
+				<li><span class="caption">{$input.desc|escape:'htmlall':'UTF-8'}</span></li>
 			</ul>
 		{elseif $input.type == 'radio'}
 			<ul>
