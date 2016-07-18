@@ -21,7 +21,7 @@
 *  @copyright 2014 PAYU LATAM
 *  @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *}
-<link rel="stylesheet" href="{$css_dir}global.css" type="text/css" media="all">
+<link href="{$css_dir|escape:'htmlall':'UTF-8'}global.css" rel="stylesheet" type="text/css" media="all">
 <link href="{$css|escape:'htmlall':'UTF-8'}payu.css" rel="stylesheet" type="text/css">
 {if $valid}
 	<center>
