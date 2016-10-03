@@ -43,6 +43,10 @@ foreach ($products as $product) {
     $description .= $product['name'] . ',';
 }
 
+if (strlen($description) > 255){
+    $description = substr($description,0,240).' y otros...';
+}
+
 $currency = new Currency((int)$cart->id_currency);
 
 $test = 0;
