@@ -43,7 +43,7 @@ foreach ($products as $product) {
     $description .= $product['name'] . ',';
 }
 
-if (strlen($description) > 255){
+if (count_chars($description,3) > 255){
     $description = substr($description,0,240).' y otros...';
 }
 
