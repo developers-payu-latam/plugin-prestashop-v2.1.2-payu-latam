@@ -44,7 +44,7 @@ foreach ($products as $product) {
 }
 
 if (count_chars($description,3) > 255){
-    $description = substr($description,0,240).' y otros...';
+    $description = Tools::substr($description,0,240).' y otros...';
 }
 
 $currency = new Currency((int)$cart->id_currency);
