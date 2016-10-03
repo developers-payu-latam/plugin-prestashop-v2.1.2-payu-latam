@@ -240,8 +240,8 @@ class PayuLatam extends PaymentModule
             ),
             'tracking' => 'http://www.prestashop.com/modules/pagosonline.png?url_site=' . Tools::safeOutput($_SERVER['SERVER_NAME']) . '&id_lang=' .
                 (int)$this->context->cookie->id_lang,
-            'img' => '../modules/payulatam/img/',
-            'css' => '../modules/payulatam/css/',
+            'img' => '../modules/payulatam/views/img/',
+            'css' => '../modules/payulatam/views/css/',
             'lang' => ($this->context->language->iso_code != 'en' || $this->context->language->iso_code != 'es' ? 'en' : $this->context->language->iso_code)
         ));
 
