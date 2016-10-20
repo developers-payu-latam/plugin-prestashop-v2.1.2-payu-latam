@@ -23,8 +23,6 @@
 *  @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 */
 
-header('Content-type: text/plain; charset=utf-8');
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -56,24 +54,9 @@ class PayuLatam extends PaymentModule
         if (_PS_VERSION_ < '1.5') {
             require(_PS_MODULE_DIR_ . $this->name . '/backward_compatibility/backward.php');
         }
-
         $this->checkForUpdates();
     }
-
-    private function checkForUpdates()
-    {
-        // Used by PrestaShop 1.3 & 1.4
-        if (version_compare(_PS_VERSION_, '1.5', '<') && self::isInstalled($this->name)) {
-            foreach (array('2.0') as $version) {
-                $file = dirname(__FILE__) . '/upgrade/upgrade-' . $version . '.php';
-                if (Configuration::get('PAYU_LATAM') < $version && file_exists($file)) {
-                    include_once($file);
-                    call_user_func('upgrade_module_' . str_replace('.', '_', $version), $this);
-                }
-            }
-        }
-    }
-
+    
     public function install()
     {
         $this->_createStates();
@@ -82,77 +65,9 @@ class PayuLatam extends PaymentModule
             return false;
         }
         return true;
+        
     }
-
-    private function _createStates()
-    {
-        if (!Configuration::get('PAYU_OS_PENDING')) {
-            $order_state = new OrderState();
-            $order_state->name = array();
-            foreach (Language::getLanguages() as $language) {
-                $order_state->name[$language['id_lang']] = 'Pending';
-            }
-
-            $order_state->send_email = false;
-            $order_state->color = '#FEFF64';
-            $order_state->hidden = false;
-            $order_state->delivery = false;
-            $order_state->logable = false;
-            $order_state->invoice = false;
-
-            if ($order_state->add()) {
-                $source = dirname(__FILE__) . '/img/logo.jpg';
-                $destination = dirname(__FILE__) . '/../../img/os/' . (int)$order_state->id . '.gif';
-                copy($source, $destination);
-            }
-            Configuration::updateValue('PAYU_OS_PENDING', (int)$order_state->id);
-        }
-
-        if (!Configuration::get('PAYU_OS_FAILED')) {
-            $order_state = new OrderState();
-            $order_state->name = array();
-            foreach (Language::getLanguages() as $language) {
-                $order_state->name[$language['id_lang']] = 'Failed Payment';
-            }
-
-            $order_state->send_email = false;
-            $order_state->color = '#8F0621';
-            $order_state->hidden = false;
-            $order_state->delivery = false;
-            $order_state->logable = false;
-            $order_state->invoice = false;
-
-            if ($order_state->add()) {
-                $source = dirname(__FILE__) . '/img/logo.jpg';
-                $destination = dirname(__FILE__) . '/../../img/os/' . (int)$order_state->id . '.gif';
-                copy($source, $destination);
-            }
-            Configuration::updateValue('PAYU_OS_FAILED', (int)$order_state->id);
-        }
-
-        if (!Configuration::get('PAYU_OS_REJECTED')) {
-            $order_state = new OrderState();
-            $order_state->name = array();
-            foreach (Language::getLanguages() as $language) {
-                $order_state->name[$language['id_lang']] = 'Rejected Payment';
-            }
-
-            $order_state->send_email = false;
-            $order_state->color = '#8F0621';
-            $order_state->hidden = false;
-            $order_state->delivery = false;
-            $order_state->logable = false;
-            $order_state->invoice = false;
-
-            if ($order_state->add()) {
-                $source = dirname(__FILE__) . '/img/logo.jpg';
-                $destination = dirname(__FILE__) . '/../../img/os/' . (int)$order_state->id . '.gif';
-                copy($source, $destination);
-            }
-            Configuration::updateValue('PAYU_OS_REJECTED', (int)$order_state->id);
-        }
-    }
-
+    
     public function uninstall()
     {
         if (!parent::uninstall()
@@ -172,9 +87,9 @@ class PayuLatam extends PaymentModule
     public function getContent()
     {
         $html = '';
-
+        
         $payu_form_orderby = Tools::getValue('submitPayU');
-
+        
         if (Tools::getIsset($payu_form_orderby) and $payu_form_orderby) {
             $this->_postValidation();
             if (!count($this->_postErrors)) {
@@ -189,6 +104,102 @@ class PayuLatam extends PaymentModule
         return $html . $this->_displayAdminTpl();
     }
 
+    private function _displayAdminTpl()
+    {
+        $this->context->smarty->assign(array(
+            'tab' => array(
+                'intro' => array(
+                    'title' => $this->l('How to configure'),
+                    'content' => $this->_displayHelpTpl(),
+                    'icon' => '../modules/payulatam/views/img/info-icon.gif',
+                    'tab' => 'conf',
+                    'selected' => (Tools::isSubmit('submitPayU') ? false : true),
+                    'style' => 'config_payu'
+                    ),
+                'credential' => array(
+                    'title' => $this->l('Credentials'),
+                    'content' => $this->_displayCredentialTpl(),
+                    'icon' => '../modules/payulatam/views/img/credential.png',
+                    'tab' => 'crendeciales',
+                    'selected' => (Tools::isSubmit('submitPayU') ? true : false),
+                    'style' => 'credentials_payu'
+                ),
+            ),
+            'tracking' => 'http://www.prestashop.com/modules/pagosonline.png?url_site=' . Tools::safeOutput($_SERVER['SERVER_NAME']) . '&id_lang=' .
+                (int)$this->context->cookie->id_lang,
+            'img' => '../modules/payulatam/views/img/',
+            'css' => '../modules/payulatam/views/css/',
+            'lang' => ($this->context->language->iso_code != 'en' || $this->context->language->iso_code != 'es' ? 'en' : $this->context->language->iso_code)
+        ));
+
+        return $this->display(__FILE__, 'views/templates/admin/admin.tpl');
+    }
+    
+    private function _displayHelpTpl()
+    {
+        return $this->display(__FILE__, 'views/templates/admin/help.tpl');
+    }
+
+    private function _displayCredentialTpl()
+    {
+        $this->context->smarty->assign(array(
+            'formCredential' => './index.php?tab=AdminModules&configure=payulatam&token=' . Tools::getAdminTokenLite('AdminModules') .
+                '&tab_module=' . $this->tab . '&module_name=payulatam',
+            'credentialTitle' => $this->l('Log in'),
+            'credentialInputVar' => array(
+                'merchant_id' => array(
+                    'name' => 'merchant_id',
+                    'required' => true,
+                    'value' => (Tools::getValue('merchant_id') ? Tools::safeOutput(Tools::getValue('merchant_id')) :
+                        Tools::safeOutput(Configuration::get('PAYU_LATAM_MERCHANT_ID'))),
+                    'type' => 'text',
+                    'label' => $this->l('Merchant'),
+                    'desc' => $this->l('You will find the Merchant ID in the section "Technical Information"') . '<br>' . $this->l('of the Administrative Module.'),
+                ),
+                'api_key' => array(
+                    'name' => 'api_key',
+                    'required' => true,
+                    'value' => (Tools::getValue('api_key') ? Tools::safeOutput(Tools::getValue('api_key')) :
+                        Tools::safeOutput(Configuration::get('PAYU_LATAM_API_KEY'))),
+                    'type' => 'text',
+                    'label' => $this->l('Api Key'),
+                    'desc' => $this->l('You will find the API Key in the section "Technical Information"') . '<br>' . $this->l('of the Administrative Module.'),
+                ),
+                'account_id' => array(
+                    'name' => 'account_id',
+                    'required' => false,
+                    'value' => (Tools::getValue('account_id') ? (int)Tools::getValue('account_id') : (int)Configuration::get('PAYU_LATAM_ACCOUNT_ID')),
+                    'type' => 'text',
+                    'label' => $this->l('Account ID'),
+                    'desc' => $this->l('You will find the Account ID in the section "Account"') . '<br>' . $this->l('of the Administrative Module.'),
+                ),
+                'test' => array(
+                    'name' => 'test',
+                    'required' => false,
+                    'value' => (Tools::getValue('test') ? Tools::safeOutput(Tools::getValue('test')) : Tools::safeOutput(Configuration::get('PAYU_LATAM_TEST'))),
+                    'type' => 'radio',
+                    'values' => array('true', 'false'),
+                    'label' => $this->l('Mode Test'),
+                    'desc' => $this->l(''),
+                ))));
+        return $this->display(__FILE__, 'views/templates/admin/credential.tpl');
+    }
+
+    public function hookPayment($params)
+    {
+        if ($this->active) {
+        } else {
+            return;
+        }
+        
+        $this->context->smarty->assign(array(
+            'css' => '../modules/payulatam/views/css/',
+            'module_dir' => _PS_MODULE_DIR_ . $this->name . '/'
+        ));
+
+        return $this->display(__FILE__, 'views/templates/hook/payulatam_payment.tpl');
+    }
+    
     private function _postValidation()
     {
         if (!Validate::isCleanHtml(Tools::getValue('merchant_id')) || !Validate::isGenericName(Tools::getValue('merchant_id'))) {
@@ -216,100 +227,87 @@ class PayuLatam extends PaymentModule
         Configuration::updateValue('PAYU_LATAM_API_KEY', (string)Tools::getValue('api_key'));
         Configuration::updateValue('PAYU_LATAM_TEST', Tools::getValue('test'));
     }
-
-    private function _displayAdminTpl()
+    
+    private function _createStates()
     {
-        $this->context->smarty->assign(array(
-            'tab' => array(
-                'intro' => array(
-                    'title' => $this->l('How to configure'),
-                    'content' => $this->_displayHelpTpl(),
-                    'icon' => '../modules/payulatam/img/info-icon.gif',
-                    'tab' => 'conf',
-                    'selected' => (Tools::isSubmit('submitPayU') ? false : true),
-                    'style' => 'config_payu'
-                ),
-                'credential' => array(
-                    'title' => $this->l('Credentials'),
-                    'content' => $this->_displayCredentialTpl(),
-                    'icon' => '../modules/payulatam/img/credential.png',
-                    'tab' => 'crendeciales',
-                    'selected' => (Tools::isSubmit('submitPayU') ? true : false),
-                    'style' => 'credentials_payu'
-                ),
-            ),
-            'tracking' => 'http://www.prestashop.com/modules/pagosonline.png?url_site=' . Tools::safeOutput($_SERVER['SERVER_NAME']) . '&id_lang=' .
-                (int)$this->context->cookie->id_lang,
-            'img' => '../modules/payulatam/views/img/',
-            'css' => '../modules/payulatam/views/css/',
-            'lang' => ($this->context->language->iso_code != 'en' || $this->context->language->iso_code != 'es' ? 'en' : $this->context->language->iso_code)
-        ));
-
-        return $this->display(__FILE__, 'views/templates/admin/admin.tpl');
-    }
-
-    private function _displayHelpTpl()
-    {
-        return $this->display(__FILE__, 'views/templates/admin/help.tpl');
-    }
-
-    private function _displayCredentialTpl()
-    {
-        $this->context->smarty->assign(array(
-            'formCredential' => './index.php?tab=AdminModules&configure=payulatam&token=' . Tools::getAdminTokenLite('AdminModules') .
-                '&tab_module=' . $this->tab . '&module_name=payulatam',
-            'credentialTitle' => $this->l('Log in'),
-            'credentialInputVar' => array(
-                'merchant_id' => array(
-                    'name' => 'merchant_id',
-                    'required' => true,
-                    'value' => (Tools::getValue('merchant_id') ? Tools::safeOutput(Tools::getValue('merchant_id')) :
-                        Tools::safeOutput(Configuration::get('PAYU_LATAM_MERCHANT_ID'))),
-                    'type' => 'text',
-                    'label' => $this->l('Merchant'),
-                    'desc' => $this->l('You will find the Merchant ID in the section “Technical Information�?') . '<br>' . $this->l('of the Administrative Module.'),
-                ),
-                'api_key' => array(
-                    'name' => 'api_key',
-                    'required' => true,
-                    'value' => (Tools::getValue('api_key') ? Tools::safeOutput(Tools::getValue('api_key')) :
-                        Tools::safeOutput(Configuration::get('PAYU_LATAM_API_KEY'))),
-                    'type' => 'text',
-                    'label' => $this->l('Api Key'),
-                    'desc' => $this->l('You will find the API Key in the section “Technical Information�?') . '<br>' . $this->l('of the Administrative Module.'),
-                ),
-                'account_id' => array(
-                    'name' => 'account_id',
-                    'required' => false,
-                    'value' => (Tools::getValue('account_id') ? (int)Tools::getValue('account_id') : (int)Configuration::get('PAYU_LATAM_ACCOUNT_ID')),
-                    'type' => 'text',
-                    'label' => $this->l('Account ID'),
-                    'desc' => $this->l('You will find the Account ID in the section “Account�?') . '<br>' . $this->l('of the Administrative Module.'),
-                ),
-                'test' => array(
-                    'name' => 'test',
-                    'required' => false,
-                    'value' => (Tools::getValue('test') ? Tools::safeOutput(Tools::getValue('test')) : Tools::safeOutput(Configuration::get('PAYU_LATAM_TEST'))),
-                    'type' => 'radio',
-                    'values' => array('true', 'false'),
-                    'label' => $this->l('Mode Test'),
-                    'desc' => $this->l(''),
-                ))));
-        return $this->display(__FILE__, 'views/templates/admin/credential.tpl');
-    }
-
-    public function hookPayment($params)
-    {
-        if ($this->active) {
-        } else {
-            return;
+        if (!Configuration::get('PAYU_OS_PENDING')) {
+            $order_state = new OrderState();
+            $order_state->name = array();
+            foreach (Language::getLanguages() as $language) {
+                $order_state->name[$language['id_lang']] = 'Pending';
+            }
+            
+            $order_state->send_email = false;
+            $order_state->color = '#FEFF64';
+            $order_state->hidden = false;
+            $order_state->delivery = false;
+            $order_state->logable = false;
+            $order_state->invoice = false;
+            
+            if ($order_state->add()) {
+                $source = dirname(__FILE__) . '/views/img/logo.jpg';
+                $destination = dirname(__FILE__) . '/../../views/img/os/' . (int)$order_state->id . '.gif';
+                copy($source, $destination);
+            }
+            Configuration::updateValue('PAYU_OS_PENDING', (int)$order_state->id);
         }
 
-        $this->context->smarty->assign(array(
-            'css' => '../modules/payulatam/css/',
-            'module_dir' => _PS_MODULE_DIR_ . $this->name . '/'
-        ));
+        if (!Configuration::get('PAYU_OS_FAILED')) {
+            $order_state = new OrderState();
+            $order_state->name = array();
+            foreach (Language::getLanguages() as $language) {
+                $order_state->name[$language['id_lang']] = 'Failed Payment';
+            }
 
-        return $this->display(__FILE__, 'views/templates/hook/payulatam_payment.tpl');
+            $order_state->send_email = false;
+            $order_state->color = '#8F0621';
+            $order_state->hidden = false;
+            $order_state->delivery = false;
+            $order_state->logable = false;
+            $order_state->invoice = false;
+
+            if ($order_state->add()) {
+                $source = dirname(__FILE__) . '/views/img/logo.jpg';
+                $destination = dirname(__FILE__) . '/../../views/img/os/' . (int)$order_state->id . '.gif';
+                copy($source, $destination);
+            }
+            Configuration::updateValue('PAYU_OS_FAILED', (int)$order_state->id);
+        }
+
+        if (!Configuration::get('PAYU_OS_REJECTED')) {
+            $order_state = new OrderState();
+            $order_state->name = array();
+            foreach (Language::getLanguages() as $language) {
+                $order_state->name[$language['id_lang']] = 'Rejected Payment';
+            }
+
+            $order_state->send_email = false;
+            $order_state->color = '#8F0621';
+            $order_state->hidden = false;
+            $order_state->delivery = false;
+            $order_state->logable = false;
+            $order_state->invoice = false;
+
+            if ($order_state->add()) {
+                $source = dirname(__FILE__) . '/views/img/logo.jpg';
+                $destination = dirname(__FILE__) . '/../../views/img/os/' . (int)$order_state->id . '.gif';
+                copy($source, $destination);
+            }
+            Configuration::updateValue('PAYU_OS_REJECTED', (int)$order_state->id);
+        }
+    }
+    
+    private function checkForUpdates()
+    {
+        // Used by PrestaShop 1.3 & 1.4
+        if (version_compare(_PS_VERSION_, '1.5', '<') && self::isInstalled($this->name)) {
+            foreach (array('2.0') as $version) {
+                $file = dirname(__FILE__) . '/upgrade/upgrade-' . $version . '.php';
+                if (Configuration::get('PAYU_LATAM') < $version && file_exists($file)) {
+                    include_once($file);
+                    call_user_func('upgrade_module_' . str_replace('.', '_', $version), $this);
+                }
+            }
+        }
     }
 }
