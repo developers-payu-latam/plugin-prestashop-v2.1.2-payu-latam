@@ -134,12 +134,12 @@ class PayuLatam extends PaymentModule
 
         return $this->display(__FILE__, 'views/templates/admin/admin.tpl');
     }
-    
+
     private function _displayHelpTpl()
     {
         return $this->display(__FILE__, 'views/templates/admin/help.tpl');
     }
-
+    
     private function _displayCredentialTpl()
     {
         $this->context->smarty->assign(array(
