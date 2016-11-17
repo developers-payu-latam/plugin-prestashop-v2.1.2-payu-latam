@@ -35,7 +35,7 @@ h2{ font-family: 'amplesoft-regularregular';font-size:24px;}
 
 h3{ font-family: 'amplesoft-regularregular';font-size:20px;}
 
-div.header_payu { background: url(../views/img/header.png) no-repeat right top #f6f6f6; overflow: auto;height:258px;}
+div.header_payu { background: url(../img/header.png) no-repeat right top #f6f6f6; overflow: auto;height:258px;}
 
 .table-response{ width: 42%;}
 
@@ -79,7 +79,7 @@ div.header_payu { background: url(../views/img/header.png) no-repeat right top #
 
 .md_wrapper_gray{background-color:#f8f8f8;border-radius:10px;padding:10px 10px 25px 10px;margin-bottom:20px;width:80%;}
 
-.md-btn{color:#ffffff;font-family: 'open_sansbold';text-align: center;text-decoration:none;background-image:url(../views/img/arrow_button.png);background-position:90% center; background-repeat:no-repeat;}
+.md-btn{color:#ffffff;font-family: 'open_sansbold';text-align: center;text-decoration:none;background-image:url(../img/arrow_button.png);background-position:90% center; background-repeat:no-repeat;}
 
 .button_payu{background-color:#b2d235 !important;  padding:16px 30px 16px 20px !important; display:block;border-radius:40px !important; color:#ffffff !important; text-decoration:none;margin-top:20px !important; margin-left:40px !important;  border:0;}
 
@@ -99,7 +99,7 @@ div.header_payu { background: url(../views/img/header.png) no-repeat right top #
 
 .benefits{padding-top:15px;padding-bottom:20px;}
 
-.benefits ul li, .security ul li{list-style-image: url("../views/img/bullet.png");  margin: 0 0 8px 0;}
+.benefits ul li, .security ul li{list-style-image: url("../img/bullet.png");  margin: 0 0 8px 0;}
 
 .benefits ul, .security ul{margin: 0 15px 0px 0px; padding: 0 28px;}
 
@@ -115,9 +115,9 @@ ul li{text-indent:0px;list-style-type:none;padding:0px;margin-left:0px;}
   
  .config_payu h3, .credentials_payu h3{  color: #262626; font-size: 24px;}
 
-.config_payu h3{background: url('../views/img/config.png') no-repeat 0px; height: 40px; padding-left: 45px; padding-top: 5px;}
+.config_payu h3{background: url('../img/config.png') no-repeat 0px; height: 40px; padding-left: 45px; padding-top: 5px;}
 
-.credentials_payu h3{background:url('../views/img/credentials.png') no-repeat 0px;height: 40px;padding-left: 45px;padding-top: 5px;}
+.credentials_payu h3{background:url('../img/credentials.png') no-repeat 0px;height: 40px;padding-left: 45px;padding-top: 5px;}
   
  .credentials_payu .caption{color: #7e7e7e;font-style: italic;font-size: 12px;font-family: #arial;}
   
@@ -127,7 +127,7 @@ ul li{text-indent:0px;list-style-type:none;padding:0px;margin-left:0px;}
   
   .credentials_payu label, .credentials_payu .label_payu{font-size: 15px;color: #262626;font-family: 'open_sansbold';width: 100% !important;text-align: left!important;font-weight: normal !important;padding: 0 !important;}
   
-  .advice_payu{background:#4cc0ad url('../views/img/alert.png') no-repeat 20px 20px; padding: 3px 20px 10px 20px; color: #ffffff;border-radius:5px;}
+  .advice_payu{background:#4cc0ad url('../img/alert.png') no-repeat 20px 20px; padding: 3px 20px 10px 20px; color: #ffffff;border-radius:5px;}
   
   .advice_payu h4{font-family: 'open_sansbold';padding-left:45px;font-size:18px;}
   

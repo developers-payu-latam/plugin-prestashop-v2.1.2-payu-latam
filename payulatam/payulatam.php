@@ -87,21 +87,23 @@ class PayuLatam extends PaymentModule
     public function getContent()
     {
         $html = '';
-        
-        $payu_form_orderby = Tools::getValue('submitPayU');
-        
-        if (Tools::getIsset($payu_form_orderby) and $payu_form_orderby) {
+        if (isset($_POST) && isset($_POST['submitPayU']))
+        {
             $this->_postValidation();
-            if (!count($this->_postErrors)) {
-                $this->_saveConfiguration();
-                $html .= $this->displayConfirmation($this->l('Settings updated'));
-            } else {
-                foreach ($this->_postErrors as $err) {
+            if (!count($this->_postErrors))
+            {
+                    $this->_saveConfiguration();
+                    $html .= $this->displayConfirmation($this->l('Settings updated'));
+            }
+            else
+            {
+                foreach ($this->_postErrors as $err)
+                {
                     $html .= $this->displayError($err);
                 }
-            }
+            }                 
         }
-        return $html . $this->_displayAdminTpl();
+        return $html.$this->_displayAdminTpl();
     }
 
     private function _displayAdminTpl()
