@@ -87,7 +87,10 @@ class PayuLatam extends PaymentModule
     public function getContent()
     {
         $html = '';
-        if (isset($_POST) && isset($_POST['submitPayU']))
+        
+        $array_post = Tools::getValue($_POST);
+        
+        if (!empty($array_post) && !empty($array_post['submitPayU']))
         {
             $this->_postValidation();
             if (!count($this->_postErrors))
