@@ -89,12 +89,12 @@ class PayuLatam extends PaymentModule
         $html = '';
         if (!empty(Tools::getValue('submitPayU'))) {
             $this->postValidation();
-            if (!count($this->_postErrors)) {
+            if (!count($this->postErrors)) {
                     $this->saveConfiguration();
                     $html .= $this->displayConfirmation($this->l('Settings updated'));
             } else {
-                foreach ($this->_postErrors as $err) {
-                    $html .= $this->displayError($err);                    
+                foreach ($this->postErrors as $err) {
+                    $html .= $this->displayError($err);
                 }
             }
         }
@@ -209,22 +209,22 @@ class PayuLatam extends PaymentModule
     {
         if (!Validate::isCleanHtml(Tools::getValue('merchant_id')) ||
                 !Validate::isGenericName(Tools::getValue('merchant_id'))) {
-            $this->_postErrors[] = $this->l('You must indicate the merchant id');
+            $this->postErrors[] = $this->l('You must indicate the merchant id');
         }
 
         if (!Validate::isCleanHtml(Tools::getValue('account_id')) ||
                 !Validate::isGenericName(Tools::getValue('account_id'))) {
-            $this->_postErrors[] = $this->l('You must indicate the account id');
+            $this->postErrors[] = $this->l('You must indicate the account id');
         }
 
         if (!Validate::isCleanHtml(Tools::getValue('api_key')) ||
                 !Validate::isGenericName(Tools::getValue('api_key'))) {
-            $this->_postErrors[] = $this->l('You must indicate the API key');
+            $this->postErrors[] = $this->l('You must indicate the API key');
         }
 
         if (!Validate::isCleanHtml(Tools::getValue('test')) ||
                 !Validate::isGenericName(Tools::getValue('test'))) {
-            $this->_postErrors[] = $this->l('You must indicate if the transaction mode is test or not');
+            $this->postErrors[] = $this->l('You must indicate if the transaction mode is test or not');
         }
 
     }
