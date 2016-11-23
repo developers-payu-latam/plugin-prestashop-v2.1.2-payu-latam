@@ -59,7 +59,7 @@ class PayuLatam extends PaymentModule
     
     public function install()
     {
-        $this->_createStates();
+        $this->createStates();
 
         if (!parent::install() || !$this->registerHook('payment') || !$this->registerHook('paymentReturn')) {
             return false;
@@ -88,11 +88,11 @@ class PayuLatam extends PaymentModule
     {
         $html = '';
         if (!empty(Tools::getValue('submitPayU'))) {
-            $this->_postValidation();
+            $this->postValidation();
             if (!count($this->_postErrors)) {
-                    $this->_saveConfiguration();
+                    $this->saveConfiguration();
                     $html .= $this->displayConfirmation($this->l('Settings updated'));
-            }else{
+            } else {
                 foreach ($this->_postErrors as $err) {
                     $html .= $this->displayError($err);                    
                 }
@@ -127,7 +127,7 @@ class PayuLatam extends PaymentModule
                 (int)$this->context->cookie->id_lang,
             'img' => '../modules/payulatam/views/img/',
             'css' => '../modules/payulatam/views/css/',
-            'lang' => ($this->context->language->iso_code != 'en' || 
+            'lang' => ($this->context->language->iso_code != 'en' ||
                         $this->context->language->iso_code != 'es' ? 'en' : $this->context->language->iso_code)
         ));
 
@@ -205,7 +205,7 @@ class PayuLatam extends PaymentModule
         return $this->display(__FILE__, 'views/templates/hook/payulatam_payment.tpl');
     }
     
-    private function _postValidation()
+    private function postValidation()
     {
         if (!Validate::isCleanHtml(Tools::getValue('merchant_id')) ||
                 !Validate::isGenericName(Tools::getValue('merchant_id'))) {
@@ -229,7 +229,7 @@ class PayuLatam extends PaymentModule
 
     }
 
-    private function _saveConfiguration()
+    private function saveConfiguration()
     {
         Configuration::updateValue('PAYU_LATAM_MERCHANT_ID', (string)Tools::getValue('merchant_id'));
         Configuration::updateValue('PAYU_LATAM_ACCOUNT_ID', (string)Tools::getValue('account_id'));
@@ -237,7 +237,7 @@ class PayuLatam extends PaymentModule
         Configuration::updateValue('PAYU_LATAM_TEST', Tools::getValue('test'));
     }
     
-    private function _createStates()
+    private function createStates()
     {
         if (!Configuration::get('PAYU_OS_PENDING')) {
             $order_state = new OrderState();
