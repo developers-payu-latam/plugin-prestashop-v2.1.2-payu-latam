@@ -30,7 +30,7 @@ if (!defined('_PS_VERSION_')) {
 class PayuLatam extends PaymentModule
 {
 
-    private $_postErrors = array();
+    private $postErrors = array();
 
     public function __construct()
     {
@@ -87,27 +87,28 @@ class PayuLatam extends PaymentModule
     public function getContent()
     {
         $html = '';
-        if (!empty(Tools::getValue('submitPayU'))){
+        if (!empty(Tools::getValue('submitPayU'))) {
             $this->_postValidation();
-            if (!count($this->_postErrors)){
+            if (!count($this->_postErrors)) {
                     $this->_saveConfiguration();
                     $html .= $this->displayConfirmation($this->l('Settings updated'));
             }else{
-                foreach ($this->_postErrors as $err){
-                    $html .= $this->displayError($err);
+                foreach ($this->_postErrors as $err) {
+                    $html .= $this->displayError($err);                    
                 }
-            }                 
+            }
         }
-        return $html.$this->_displayAdminTpl();
+        return $html.$this->displayAdminTpl();
     }
 
-    private function _displayAdminTpl()
+    private function displayAdminTpl()
     {
+        $polUrl = 'http://www.prestashop.com/modules/pagosonline.png?url_site=';
         $this->context->smarty->assign(array(
             'tab' => array(
                 'intro' => array(
                     'title' => $this->l('How to configure'),
-                    'content' => $this->_displayHelpTpl(),
+                    'content' => $this->displayHelpTpl(),
                     'icon' => '../modules/payulatam/views/img/info-icon.gif',
                     'tab' => 'conf',
                     'selected' => (Tools::isSubmit('submitPayU') ? false : true),
@@ -115,33 +116,35 @@ class PayuLatam extends PaymentModule
                     ),
                 'credential' => array(
                     'title' => $this->l('Credentials'),
-                    'content' => $this->_displayCredentialTpl(),
+                    'content' => $this->displayCredentialTpl(),
                     'icon' => '../modules/payulatam/views/img/credential.png',
                     'tab' => 'crendeciales',
                     'selected' => (Tools::isSubmit('submitPayU') ? true : false),
                     'style' => 'credentials_payu'
                 ),
             ),
-            'tracking' => 'http://www.prestashop.com/modules/pagosonline.png?url_site=' . Tools::safeOutput($_SERVER['SERVER_NAME']) . '&id_lang=' .
+            'tracking' => $polUrl . Tools::safeOutput($_SERVER['SERVER_NAME']) . '&id_lang=' .
                 (int)$this->context->cookie->id_lang,
             'img' => '../modules/payulatam/views/img/',
             'css' => '../modules/payulatam/views/css/',
-            'lang' => ($this->context->language->iso_code != 'en' || $this->context->language->iso_code != 'es' ? 'en' : $this->context->language->iso_code)
+            'lang' => ($this->context->language->iso_code != 'en' || 
+                        $this->context->language->iso_code != 'es' ? 'en' : $this->context->language->iso_code)
         ));
 
         return $this->display(__FILE__, 'views/templates/admin/admin.tpl');
     }
 
-    private function _displayHelpTpl()
+    private function displayHelpTpl()
     {
         return $this->display(__FILE__, 'views/templates/admin/help.tpl');
     }
     
-    private function _displayCredentialTpl()
+    private function displayCredentialTpl()
     {
         $this->context->smarty->assign(array(
-            'formCredential' => './index.php?tab=AdminModules&configure=payulatam&token=' . Tools::getAdminTokenLite('AdminModules') .
-                '&tab_module=' . $this->tab . '&module_name=payulatam',
+            'formCredential' => './index.php?tab=AdminModules&configure=payulatam&token=' .
+            Tools::getAdminTokenLite('AdminModules') .
+            '&tab_module=' . $this->tab . '&module_name=payulatam',
             'credentialTitle' => $this->l('Log in'),
             'credentialInputVar' => array(
                 'merchant_id' => array(
@@ -151,7 +154,8 @@ class PayuLatam extends PaymentModule
                         Tools::safeOutput(Configuration::get('PAYU_LATAM_MERCHANT_ID'))),
                     'type' => 'text',
                     'label' => $this->l('Merchant'),
-                    'desc' => $this->l('You will find the Merchant ID in the section "Technical Information"') . '<br>' . $this->l('of the Administrative Module.'),
+                    'desc' => $this->l('You will find the Merchant ID in the section "Technical Information"') .
+                    '<br>' . $this->l('of the Administrative Module.'),
                 ),
                 'api_key' => array(
                     'name' => 'api_key',
@@ -160,20 +164,24 @@ class PayuLatam extends PaymentModule
                         Tools::safeOutput(Configuration::get('PAYU_LATAM_API_KEY'))),
                     'type' => 'text',
                     'label' => $this->l('Api Key'),
-                    'desc' => $this->l('You will find the API Key in the section "Technical Information"') . '<br>' . $this->l('of the Administrative Module.'),
+                    'desc' => $this->l('You will find the API Key in the section "Technical Information"') .
+                    '<br>' . $this->l('of the Administrative Module.'),
                 ),
                 'account_id' => array(
                     'name' => 'account_id',
                     'required' => false,
-                    'value' => (Tools::getValue('account_id') ? (int)Tools::getValue('account_id') : (int)Configuration::get('PAYU_LATAM_ACCOUNT_ID')),
+                    'value' => (Tools::getValue('account_id') ? (int)Tools::getValue('account_id') :
+                        (int)Configuration::get('PAYU_LATAM_ACCOUNT_ID')),
                     'type' => 'text',
                     'label' => $this->l('Account ID'),
-                    'desc' => $this->l('You will find the Account ID in the section "Account"') . '<br>' . $this->l('of the Administrative Module.'),
+                    'desc' => $this->l('You will find the Account ID in the section "Account"') .
+                    '<br>' . $this->l('of the Administrative Module.'),
                 ),
                 'test' => array(
                     'name' => 'test',
                     'required' => false,
-                    'value' => (Tools::getValue('test') ? Tools::safeOutput(Tools::getValue('test')) : Tools::safeOutput(Configuration::get('PAYU_LATAM_TEST'))),
+                    'value' => (Tools::getValue('test') ? Tools::safeOutput(Tools::getValue('test')) :
+                        Tools::safeOutput(Configuration::get('PAYU_LATAM_TEST'))),
                     'type' => 'radio',
                     'values' => array('true', 'false'),
                     'label' => $this->l('Mode Test'),
@@ -199,19 +207,23 @@ class PayuLatam extends PaymentModule
     
     private function _postValidation()
     {
-        if (!Validate::isCleanHtml(Tools::getValue('merchant_id')) || !Validate::isGenericName(Tools::getValue('merchant_id'))) {
+        if (!Validate::isCleanHtml(Tools::getValue('merchant_id')) ||
+                !Validate::isGenericName(Tools::getValue('merchant_id'))) {
             $this->_postErrors[] = $this->l('You must indicate the merchant id');
         }
 
-        if (!Validate::isCleanHtml(Tools::getValue('account_id')) || !Validate::isGenericName(Tools::getValue('account_id'))) {
+        if (!Validate::isCleanHtml(Tools::getValue('account_id')) ||
+                !Validate::isGenericName(Tools::getValue('account_id'))) {
             $this->_postErrors[] = $this->l('You must indicate the account id');
         }
 
-        if (!Validate::isCleanHtml(Tools::getValue('api_key')) || !Validate::isGenericName(Tools::getValue('api_key'))) {
+        if (!Validate::isCleanHtml(Tools::getValue('api_key')) ||
+                !Validate::isGenericName(Tools::getValue('api_key'))) {
             $this->_postErrors[] = $this->l('You must indicate the API key');
         }
 
-        if (!Validate::isCleanHtml(Tools::getValue('test')) || !Validate::isGenericName(Tools::getValue('test'))) {
+        if (!Validate::isCleanHtml(Tools::getValue('test')) ||
+                !Validate::isGenericName(Tools::getValue('test'))) {
             $this->_postErrors[] = $this->l('You must indicate if the transaction mode is test or not');
         }
 
