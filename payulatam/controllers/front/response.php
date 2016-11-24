@@ -72,8 +72,7 @@ class PayulatamResponseModuleFrontController extends ModuleFrontController
         $value = number_format($value, 1, '.', '');
 
         $api_key = Configuration::get('PAYU_LATAM_API_KEY');
-        $signature_local = $api_key . '~' . $merchant_id . '~' . $reference_code .
-                '~' . $value . '~' . $currency . '~' . $transaction_state;
+        $signature_local = $api_key . '~' . $merchant_id . '~' . $reference_code . '~' . $value . '~' . $currency . '~' . $transaction_state;
         $signature_md5 = md5($signature_local);
 
         if (isset($_REQUEST['polResponseCode'])) {
@@ -85,11 +84,11 @@ class PayulatamResponseModuleFrontController extends ModuleFrontController
         $messageApproved = '';
         if ($transaction_state == 6 && $pol_response_code == 5) {
             $estado_tx = $payulatam->l('Failed Transaction');
-        } elseif ($transaction_state == 6 && $pol_response_code == 4) {
+        } else if ($transaction_state == 6 && $pol_response_code == 4) {
             $estado_tx = $payulatam->l('Rejected Transaction');
-        } elseif ($transaction_state == 12 && $pol_response_code == 9994) {
+        } else if ($transaction_state == 12 && $pol_response_code == 9994) {
             $estado_tx = $payulatam->l('Pending Transaction, Please check if the debit was made in the Bank');
-        } elseif ($transaction_state == 4 && $pol_response_code == 1) {
+        } else if ($transaction_state == 4 && $pol_response_code == 1) {
             $estado_tx = $payulatam->l('Transaction Approved');
             $messageApproved = $payulatam->l('Thank you for your purchase!');
         } else {
@@ -140,9 +139,7 @@ class PayulatamResponseModuleFrontController extends ModuleFrontController
             if (!($cart->orderExists())) {
                 $customer = new Customer((int)$cart->id_customer);
                 $this->context->customer = $customer;
-                $payulatam->validateOrder((int)$cart->id, Configuration::get('PAYU_OS_PENDING'),
-                        (float)$cart->getordertotal(true), 'PayU', null, array(),
-                        (int)$cart->id_currency, false, $customer->secure_key);
+                $payulatam->validateOrder((int)$cart->id, Configuration::get('PAYU_OS_PENDING'), (float)$cart->getordertotal(true), 'PayU', null, array(), (int)$cart->id_currency, false, $customer->secure_key);
                 Configuration::updateValue('PAYULATAM_CONFIGURATION_OK', true);
             }
 

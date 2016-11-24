@@ -48,12 +48,10 @@ if ($decimals % 10 == 0) {
 
 $payulatam = new PayuLatam();
 $api_key = Configuration::get('PAYU_LATAM_API_KEY');
-$signature_local = $api_key . '~' . $merchant_id . '~' . $reference_code .
-        '~' . $value . '~' . $currency . '~' . $transaction_state;
+$signature_local = $api_key . '~' . $merchant_id . '~' . $reference_code . '~' . $value . '~' . $currency . '~' . $transaction_state;
 $signature_md5 = md5($signature_local);
 
-$pol_response_code = isset($_REQUEST['response_code_pol']) ? $_REQUEST['response_code_pol'] :
-    $_REQUEST['codigo_respuesta_pol'];
+$pol_response_code = isset($_REQUEST['response_code_pol']) ? $_REQUEST['response_code_pol'] : $_REQUEST['codigo_respuesta_pol'];
 
 $cart = new Cart((int)$reference_code);
 if (Tools::strtoupper($signature) == Tools::strtoupper($signature_md5)) {
@@ -61,11 +59,11 @@ if (Tools::strtoupper($signature) == Tools::strtoupper($signature_md5)) {
     $errors = [];
     if ($transaction_state == 6 && $pol_response_code == 5) {
         $state = 'PAYU_OS_FAILED';
-    } elseif ($transaction_state == 6 && $pol_response_code == 4) {
+    } else if ($transaction_state == 6 && $pol_response_code == 4) {
         $state = 'PAYU_OS_REJECTED';
-    } elseif ($transaction_state == 12 && $pol_response_code == 9994) {
+    } else if ($transaction_state == 12 && $pol_response_code == 9994) {
         $state = 'PAYU_OS_PENDING';
-    } elseif ($transaction_state == 4 && $pol_response_code == 1) {
+    } else if ($transaction_state == 4 && $pol_response_code == 1) {
         $state = 'PS_OS_PAYMENT';
     }
 
@@ -103,16 +101,13 @@ if (Tools::strtoupper($signature) == Tools::strtoupper($signature_md5)) {
                 Context::getContext()->customer = $customer;
                 Context::getContext()->currency = $currency_cart;
 
-                $payulatam->validateOrder((int)$cart->id, (int)Configuration::get($state),
-                        (float)$cart->getordertotal(true), 'PayU Latam', null, array(),
-                        (int)$currency_cart->id, false, $customer->secure_key);
+                $payulatam->validateOrder((int)$cart->id, (int)Configuration::get($state), (float)$cart->getordertotal(true), 'PayU Latam', null, array(), (int)$currency_cart->id, false, $customer->secure_key);
                 Configuration::updateValue('PAYULATAM_CONFIGURATION_OK', true);
                 $order = new Order((int)Order::getOrderByCartId($cart->id));
             }
             if ($state != 'PS_OS_PAYMENT') {
                 foreach ($order->getProductsDetail() as $product) {
-                    StockAvailable::updateQuantity($product['product_id'], 
-                            $product['product_attribute_id'], +(int)$product['product_quantity'], $order->id_shop);
+                    StockAvailable::updateQuantity($product['product_id'], $product['product_attribute_id'], +(int)$product['product_quantity'], $order->id_shop);
                 }
             }
         }
