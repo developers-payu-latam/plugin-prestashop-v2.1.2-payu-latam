@@ -45,7 +45,8 @@ $transaction_state = isset($_REQUEST['transactionState']) ? $_REQUEST['transacti
 $value = number_format($value, 1, '.', '');
 
 $api_key = Configuration::get('PAYU_LATAM_API_KEY');
-$signature_local = $api_key . '~' . $merchant_id . '~' . $reference_code . '~' . $value . '~' . $currency . '~' . $transaction_state;
+$signature_local = $api_key . '~' . $merchant_id . '~' . $reference_code . '~' .
+        $value . '~' . $currency . '~' . $transaction_state;
 $signature_md5 = md5($signature_local);
 
 $pol_response_code = isset($_REQUEST['polResponseCode']) ? $_REQUEST['polResponseCode'] : $_REQUEST['codigo_respuesta_pol'];
