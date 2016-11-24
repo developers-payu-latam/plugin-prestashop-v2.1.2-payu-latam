@@ -59,11 +59,11 @@ if (Tools::strtoupper($signature) == Tools::strtoupper($signature_md5)) {
     $errors = [];
     if ($transaction_state == 6 && $pol_response_code == 5) {
         $state = 'PAYU_OS_FAILED';
-    } else if ($transaction_state == 6 && $pol_response_code == 4) {
+    } elseif ($transaction_state == 6 && $pol_response_code == 4) {
         $state = 'PAYU_OS_REJECTED';
-    } else if ($transaction_state == 12 && $pol_response_code == 9994) {
+    } elseif ($transaction_state == 12 && $pol_response_code == 9994) {
         $state = 'PAYU_OS_PENDING';
-    } else if ($transaction_state == 4 && $pol_response_code == 1) {
+    } elseif ($transaction_state == 4 && $pol_response_code == 1) {
         $state = 'PS_OS_PAYMENT';
     }
 

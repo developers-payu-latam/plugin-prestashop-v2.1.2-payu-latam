@@ -40,7 +40,7 @@ if (!in_array('BWDisplay', get_declared_classes()))
 // If not under an object we don't have to set the context
 if (!isset($this))
 	return;
-else if (isset($this->context))
+elseif (isset($this->context))
 {
 	// If we are under an 1.5 version and backoffice, we have to set some backward variable
 	if (_PS_VERSION_ >= '1.5' && isset($this->context->employee->id) && $this->context->employee->id && isset(AdminController::$currentIndex) && !empty(AdminController::$currentIndex))

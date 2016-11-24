@@ -84,11 +84,11 @@ class PayulatamResponseModuleFrontController extends ModuleFrontController
         $messageApproved = '';
         if ($transaction_state == 6 && $pol_response_code == 5) {
             $estado_tx = $payulatam->l('Failed Transaction');
-        } else if ($transaction_state == 6 && $pol_response_code == 4) {
+        } elseif ($transaction_state == 6 && $pol_response_code == 4) {
             $estado_tx = $payulatam->l('Rejected Transaction');
-        } else if ($transaction_state == 12 && $pol_response_code == 9994) {
+        } elseif ($transaction_state == 12 && $pol_response_code == 9994) {
             $estado_tx = $payulatam->l('Pending Transaction, Please check if the debit was made in the Bank');
-        } else if ($transaction_state == 4 && $pol_response_code == 1) {
+        } elseif ($transaction_state == 4 && $pol_response_code == 1) {
             $estado_tx = $payulatam->l('Transaction Approved');
             $messageApproved = $payulatam->l('Thank you for your purchase!');
         } else {
