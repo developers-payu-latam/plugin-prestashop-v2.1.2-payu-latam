@@ -92,7 +92,7 @@ if (Tools::strtoupper($signature) == Tools::strtoupper($signature_md5)) {
         $vrCurrency = (int)$cart->id_currency;
         $vrKey = $customer->secure_key;
         
-        $payulatam->validateOrder($vrIdCart, $verStatus, $vrAmount, 'PayU', null, array(), $vrCurrency, false, $vrKey);
+        $payulatam->validateOrder($vrIdCart, $vrStatus, $vrAmount, 'PayU', null, array(), $vrCurrency, false, $vrKey);
     }
 
     Context::getContext()->smarty->assign(
