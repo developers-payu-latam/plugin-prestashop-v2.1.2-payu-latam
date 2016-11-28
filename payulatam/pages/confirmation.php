@@ -108,7 +108,7 @@ if (Tools::strtoupper($signature) == Tools::strtoupper($signature_md5)) {
                 $vcAmount = (float)$cart->getordertotal(true);
                 $vcCurrency = (int)$currency_cart->id;
                 $vcKey = $customer->secure_key;
-                $payulatam->validateOrder($vcCartId, $vcStatus, $vcAmount, 'PayU Latam', null, array(), $vcCurrency, false, $vcKey);
+$payulatam->validateOrder($vcCartId, $vcStatus, $vcAmount, 'PayU Latam', null, array(), $vcCurrency, false, $vcKey);
                 Configuration::updateValue('PAYULATAM_CONFIGURATION_OK', true);
                 $order = new Order((int)Order::getOrderByCartId($cart->id));
             }
