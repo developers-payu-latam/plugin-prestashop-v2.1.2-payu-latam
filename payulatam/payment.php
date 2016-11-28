@@ -23,9 +23,12 @@
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-include(dirname(__FILE__) . '/../../config/config.inc.php');
-include(dirname(__FILE__) . '/../../init.php');
-include_once(_PS_MODULE_DIR_ . '/payulatam/payulatam.php');
+function includes()
+{
+    include(dirname(__FILE__) . '/../../config/config.inc.php');
+    include(dirname(__FILE__) . '/../../init.php');
+    include_once(_PS_MODULE_DIR_ . '/payulatam/payulatam.php');
+}
 
 class PayUController extends FrontController
 {
