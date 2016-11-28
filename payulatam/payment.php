@@ -67,10 +67,15 @@ class PayUController extends FrontController
 
         $ref = 'payU_' . Configuration::get('PS_SHOP_NAME') . '_' . (int)self::$cart->id;
 
-        $token = md5(Tools::safeOutput(Configuration::get('PAYU_API_KEY')) . '~' .
-                Tools::safeOutput(Configuration::get('PAYU_MERCHANT_ID')) . '~' .
-                $ref . '~' . (float)self::$cart->getOrderTotal() . '~' .
-                Tools::safeOutput($currency->iso_code));
+        $tknApiKey = Tools::safeOutput(Configuration::get('PAYU_API_KEY'));
+        
+        $tknMerchant = Tools::safeOutput(Configuration::get('PAYU_MERCHANT_ID'));
+        
+        $tknAmount = (float)self::$cart->getOrderTotal();
+        
+        $tknCurrency = Tools::safeOutput($currency->iso_code);
+        
+        $token = md5($tknApiKey . '~' . $tknMerchant . '~' . $ref . '~' . $tknAmount . '~' . $tknCurrency);
 
         $params = array(
             array('value' => (Configuration::get('PAYU_DEMO') == 'yes' ? 1 : 0), 'name' => 'test'),
@@ -109,8 +114,18 @@ class PayUController extends FrontController
     public function createPendingOrder()
     {
         $payu = new PayULatam();
-        $payu->validateOrder((int)self::$cart->id, (int)Configuration::get('PAYU_WAITING_PAYMENT'),
-                (float)self::$cart->getOrderTotal(), $payu->displayName, null, array(), null, false, self::$cart->secure_key);
+        
+        $ordId = (int)self::$cart->id;
+        
+        $ordStatus = (int)Configuration::get('PAYU_WAITING_PAYMENT');
+        
+        $ordAmount = (float)self::$cart->getOrderTotal();
+        
+        $dispName = $payu->displayName;
+        
+        $secureKey = self::$cart->secure_key;
+        
+        $payu->validateOrder($ordId, $ordStatus, $ordAmount, $dispName, null, array(), null, false, $secureKey);
     }
 }
 
