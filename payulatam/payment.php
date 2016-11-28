@@ -132,7 +132,8 @@ class PayUController extends FrontController
     }
 }
 
-function payUControlerStart(){
+function payUControlerStart()
+{
     $payUController = new PayUController();
 
     if (Tools::getIsset(Tools::getValue('create-pending-order'))) {
