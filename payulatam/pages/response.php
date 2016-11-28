@@ -49,7 +49,8 @@ $signature_local = $api_key . '~' . $merchant_id . '~' . $reference_code . '~' .
         $value . '~' . $currency . '~' . $transaction_state;
 $signature_md5 = md5($signature_local);
 
-$pol_response_code = isset($_REQUEST['polResponseCode']) ? $_REQUEST['polResponseCode'] : $_REQUEST['codigo_respuesta_pol'];
+$pol_response_code = isset($_REQUEST['polResponseCode']) ?
+        $_REQUEST['polResponseCode'] : $_REQUEST['codigo_respuesta_pol'];
 
 $messageApproved = '';
 if ($transaction_state == 6 && $pol_response_code == 5) {
@@ -75,7 +76,8 @@ $cus = $_REQUEST['cus'];
 
 $description = isset($_REQUEST['description']) ? $_REQUEST['description'] : $_REQUEST['descripcion'];
 
-$lap_payment_method = isset($_REQUEST['lapPaymentMethod']) ? $_REQUEST['lapPaymentMethod'] : $_REQUEST['medio_pago_lap'];
+$lap_payment_method = isset($_REQUEST['lapPaymentMethod']) ?
+        $_REQUEST['lapPaymentMethod'] : $_REQUEST['medio_pago_lap'];
 
 $cart = new Cart((int)$reference_code);
 
@@ -83,7 +85,14 @@ if (Tools::strtoupper($signature) == Tools::strtoupper($signature_md5)) {
     if (!($cart->orderExists())) {
         $customer = new Customer((int)$cart->id_customer);
         Context::getContext()->customer = $customer;
-        $payulatam->validateOrder((int)$cart->id, Configuration::get('PAYU_OS_PENDING'), (float)$cart->getordertotal(true), 'PayU', null, array(), (int)$cart->id_currency, false, $customer->secure_key);
+        
+        $vrIdCart = (int)$cart->id;
+        $vrStatus = Configuration::get('PAYU_OS_PENDING');
+        $vrAmount = (float)$cart->getordertotal(true);
+        $vrCurrency = (int)$cart->id_currency;
+        $vrKey = $customer->secure_key;
+        
+        $payulatam->validateOrder($vrIdCart, $verStatus, $vrAmount, 'PayU', null, array(), $vrCurrency, false, $vrKey);
     }
 
     Context::getContext()->smarty->assign(

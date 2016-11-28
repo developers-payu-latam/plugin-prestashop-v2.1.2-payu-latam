@@ -52,7 +52,8 @@ $signature_local = $api_key . '~' . $merchant_id . '~' . $reference_code . '~' .
         $value . '~' . $currency . '~' . $transaction_state;
 $signature_md5 = md5($signature_local);
 
-$pol_response_code = isset($_REQUEST['response_code_pol']) ? $_REQUEST['response_code_pol'] : $_REQUEST['codigo_respuesta_pol'];
+$pol_response_code = isset($_REQUEST['response_code_pol']) ? $_REQUEST['response_code_pol'] :
+    $_REQUEST['codigo_respuesta_pol'];
 
 $cart = new Cart((int)$reference_code);
 if (Tools::strtoupper($signature) == Tools::strtoupper($signature_md5)) {
@@ -101,14 +102,23 @@ if (Tools::strtoupper($signature) == Tools::strtoupper($signature_md5)) {
                 $customer = new Customer((int)$cart->id_customer);
                 Context::getContext()->customer = $customer;
                 Context::getContext()->currency = $currency_cart;
-
-                $payulatam->validateOrder((int)$cart->id, (int)Configuration::get($state), (float)$cart->getordertotal(true), 'PayU Latam', null, array(), (int)$currency_cart->id, false, $customer->secure_key);
+                
+                $vcCartId = (int)$cart->id;
+                $vcStatus = (int)Configuration::get($state);
+                $vcAmount = (float)$cart->getordertotal(true);
+                $vcCurrency = (int)$currency_cart->id;
+                $vcKey = $customer->secure_key;
+                
+                $payulatam->validateOrder($vcCartId , $vcStatus, $vcAmount, 'PayU Latam', null, array(), $vcCurrency, false, $vcKey);
                 Configuration::updateValue('PAYULATAM_CONFIGURATION_OK', true);
                 $order = new Order((int)Order::getOrderByCartId($cart->id));
             }
             if ($state != 'PS_OS_PAYMENT') {
                 foreach ($order->getProductsDetail() as $product) {
-                    StockAvailable::updateQuantity($product['product_id'], $product['product_attribute_id'], +(int)$product['product_quantity'], $order->id_shop);
+                    $product_id = $product['product_id'];
+                    $product_attribute_id = $product['product_attribute_id'];
+                    $product_quantity = +(int)$product['product_quantity'];
+                    StockAvailable::updateQuantity($product_id, $product_attribute_id, $product_quantity, $order->id_shop);
                 }
             }
         }

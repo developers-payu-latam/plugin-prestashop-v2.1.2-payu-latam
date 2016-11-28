@@ -140,7 +140,15 @@ class PayulatamResponseModuleFrontController extends ModuleFrontController
             if (!($cart->orderExists())) {
                 $customer = new Customer((int)$cart->id_customer);
                 $this->context->customer = $customer;
-                $payulatam->validateOrder((int)$cart->id, Configuration::get('PAYU_OS_PENDING'), (float)$cart->getordertotal(true), 'PayU', null, array(), (int)$cart->id_currency, false, $customer->secure_key);
+                
+                $vCartId = (int)$cart->id;
+                $vStatus = Configuration::get('PAYU_OS_PENDING');
+                $vAmount = (float)$cart->getordertotal(true);
+                $vCurrency = (int)$cart->id_currency;
+                $vSecureKey = $customer->secure_key;
+                
+                $payulatam->validateOrder($vCartId, $vStatus, $vAmount, 'PayU', null, array(), $vCurrency, false, $vSecureKey);
+                
                 Configuration::updateValue('PAYULATAM_CONFIGURATION_OK', true);
             }
 

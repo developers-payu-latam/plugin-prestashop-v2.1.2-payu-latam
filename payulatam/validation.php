@@ -56,17 +56,26 @@ if (Configuration::get('PAYU_LATAM_TEST') == 'true') {
     $gateway_url = 'https://sandbox.gateway.payulatam.com/ppp-web-gateway';
 }
 
-if (!Validate::isLoadedObject($customer) || !Validate::isLoadedObject($billing_address) && !Validate::isLoadedObject($currency)) {
+if (!Validate::isLoadedObject($customer) ||
+        !Validate::isLoadedObject($billing_address) && !Validate::isLoadedObject($currency)) {
     Logger::addLog('Issue loading customer, address and/or currency data');
     die('An unrecoverable error occured while retrieving you data');
 }
 
-$signature = md5(Configuration::get('PAYU_LATAM_API_KEY') . '~' . Configuration::get('PAYU_LATAM_MERCHANT_ID') . '~' . (int)$cart->id . '~' . $cart->getordertotal(true) . '~' . $currency->iso_code);
+$vApikey = Configuration::get('PAYU_LATAM_API_KEY');
+$vMerchant = Configuration::get('PAYU_LATAM_MERCHANT_ID');
+$vRef = (int)$cart->id;
+$vAmount = $cart->getordertotal(true);
+$vCurrency = $currency->iso_code;
+$signature = md5($vApikey . '~' . $vMerchant . '~' . $vRef . '~' . $vAmount . '~' . $vCurrency);
 
 $base = $cart_details['total_tax'] != 0 ? $cart_details['total_price_without_tax'] - $cart_details['total_shipping_tax_exc'] : 0;
 
-if (Configuration::get('PS_SSL_ENABLED') || (!empty($_SERVER['HTTPS']) && Tools::strtolower($_SERVER['HTTPS']) != 'off')) {
-    $url = method_exists('Tools', 'getShopDomainSsl') ? 'https://' . Tools::getShopDomainSsl() . __PS_BASE_URI__ . '/modules/' . $payulatam->name . '/' : 'https://' . $_SERVER['HTTP_HOST'] . __PS_BASE_URI__ . 'modules/' . $payulatam->name . '/';
+if (Configuration::get('PS_SSL_ENABLED') || (!empty($_SERVER['HTTPS']) &&
+        Tools::strtolower($_SERVER['HTTPS']) != 'off')) {
+    $url = method_exists('Tools', 'getShopDomainSsl') ?
+            'https://' . Tools::getShopDomainSsl() . __PS_BASE_URI__ . '/modules/' .
+            $payulatam->name . '/' : 'https://' . $_SERVER['HTTP_HOST'] . __PS_BASE_URI__ . 'modules/' . $payulatam->name . '/';
 } else {
     $url = 'http://' . $_SERVER['HTTP_HOST'] . __PS_BASE_URI__ . '/modules/' . $payulatam->name . '/';
 }
@@ -81,13 +90,15 @@ if (Configuration::get('PS_SSL_ENABLED') || (!empty($_SERVER['HTTPS']) && Tools:
 
 <?php
 if (_PS_VERSION_ < '1.5') {
-    $response_url = 'http://' . htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8') . __PS_BASE_URI__ . 'modules/payulatam/pages/response.php';
+    $response_url = 'http://' . htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8') .
+            __PS_BASE_URI__ . 'modules/payulatam/pages/response.php';
 } else {
-    $response_url = 'http://' . htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8') . __PS_BASE_URI__ . 'index.php?fc=module&module=payulatam&controller=response';
+    $response_url = 'http://' . htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8') .
+            __PS_BASE_URI__ . 'index.php?fc=module&module=payulatam&controller=response';
 }
 
-$confirmation_url = 'http://' . htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8') . __PS_BASE_URI__ .
-    'modules/payulatam/pages/confirmation.php';
+$confirmation_url = 'http://' . htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8') .
+        __PS_BASE_URI__ . 'modules/payulatam/pages/confirmation.php';
 ?>
 
 <form class="md-form" id="payu_latam_form" name="payu_latam_form" method="post"
