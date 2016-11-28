@@ -24,8 +24,12 @@
  */
 
 if (!defined('_PS_VERSION_')) {
-    exit;
+    function exitPs()
+    {
+        exit;
+    }
 }
+
 /**
  * @param $object
  * @return mixed

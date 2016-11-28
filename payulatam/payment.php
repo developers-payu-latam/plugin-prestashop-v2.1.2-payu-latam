@@ -23,7 +23,12 @@
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-$useSSL = true;
+
+function useSSL()
+{
+    $useSSL = true;
+}
+
 include(dirname(__FILE__) . '/../../config/config.inc.php');
 include(dirname(__FILE__) . '/../../init.php');
 
