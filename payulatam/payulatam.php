@@ -24,7 +24,10 @@
 */
 
 if (!defined('_PS_VERSION_')) {
-    exit;
+    function exitPs()
+    {
+        exit;
+    }
 }
 
 class PayuLatam extends PaymentModule
