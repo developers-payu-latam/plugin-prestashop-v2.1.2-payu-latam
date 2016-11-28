@@ -53,7 +53,8 @@ class PayUController extends FrontController
     public function initParams()
     {
         $tax = (float)self::$cart->getOrderTotal() - (float)self::$cart->getOrderTotal(false);
-        $base = (float)self::$cart->getOrderTotal(true, Cart::ONLY_PRODUCTS) + (float)self::$cart->getOrderTotal(true, Cart::ONLY_DISCOUNTS) - (float)$tax;
+        $base = (float)self::$cart->getOrderTotal(true, Cart::ONLY_PRODUCTS) +
+                (float)self::$cart->getOrderTotal(true, Cart::ONLY_DISCOUNTS) - (float)$tax;
         if ($tax == 0) {
             $base = 0;
         }
@@ -66,13 +67,17 @@ class PayUController extends FrontController
 
         $ref = 'payU_' . Configuration::get('PS_SHOP_NAME') . '_' . (int)self::$cart->id;
 
-        $token = md5(Tools::safeOutput(Configuration::get('PAYU_API_KEY')) . '~' . Tools::safeOutput(Configuration::get('PAYU_MERCHANT_ID')) . '~' . $ref . '~' . (float)self::$cart->getOrderTotal() . '~' . Tools::safeOutput($currency->iso_code));
+        $token = md5(Tools::safeOutput(Configuration::get('PAYU_API_KEY')) . '~' .
+                Tools::safeOutput(Configuration::get('PAYU_MERCHANT_ID')) . '~' .
+                $ref . '~' . (float)self::$cart->getOrderTotal() . '~' .
+                Tools::safeOutput($currency->iso_code));
 
         $params = array(
             array('value' => (Configuration::get('PAYU_DEMO') == 'yes' ? 1 : 0), 'name' => 'test'),
             array('value' => Tools::safeOutput(Configuration::get('PAYU_MERCHANT_ID')), 'name' => 'merchantId'),
             array('value' => $ref, 'name' => 'referenceCode'),
-            array('value' => Tools::substr(Configuration::get('PS_SHOP_NAME') . ' Order', 0, 255), 'name' => 'description'),
+            array('value' => Tools::substr(Configuration::get('PS_SHOP_NAME') .
+                    ' Order', 0, 255), 'name' => 'description'),
             array('value' => (float)self::$cart->getOrderTotal(), 'name' => 'amount'),
             array('value' => Tools::safeOutput($customer->email), 'name' => 'buyerEmail'),
             array('value' => (float)$tax, 'name' => 'tax'),
@@ -81,9 +86,12 @@ class PayUController extends FrontController
             array('value' => Tools::safeOutput($currency->iso_code), 'name' => 'currency'),
             array('value' => Tools::safeOutput($language->iso_code), 'name' => 'lng'),
             array('value' => Tools::safeOutput($token), 'name' => 'signature'),
-            array('value' => 'http://' . htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8') . __PS_BASE_URI__ . 'history.php', 'name' =>
-                'responseUrl'),
-            array('value' => 'http://' . htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8') . __PS_BASE_URI__ . 'modules/payulatam/validation.php', 'name' => 'confirmationUrl'),
+            array('value' => 'http://' .
+                htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8') .
+                __PS_BASE_URI__ . 'history.php', 'name' =>'responseUrl'),
+            array('value' => 'http://' .
+                htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8') .
+                __PS_BASE_URI__ . 'modules/payulatam/validation.php', 'name' => 'confirmationUrl'),
         );
 
         if (Configuration::get('PAYU_ACCOUNT_ID') != 0) {
@@ -101,7 +109,8 @@ class PayUController extends FrontController
     public function createPendingOrder()
     {
         $payu = new PayULatam();
-        $payu->validateOrder((int)self::$cart->id, (int)Configuration::get('PAYU_WAITING_PAYMENT'), (float)self::$cart->getOrderTotal(), $payu->displayName, null, array(), null, false, self::$cart->secure_key);
+        $payu->validateOrder((int)self::$cart->id, (int)Configuration::get('PAYU_WAITING_PAYMENT'),
+                (float)self::$cart->getOrderTotal(), $payu->displayName, null, array(), null, false, self::$cart->secure_key);
     }
 }
 
