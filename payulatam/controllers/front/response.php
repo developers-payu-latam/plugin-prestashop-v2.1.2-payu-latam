@@ -146,7 +146,6 @@ class PayulatamResponseModuleFrontController extends ModuleFrontController
                 $vAmount = (float)$cart->getordertotal(true);
                 $vCurrency = (int)$cart->id_currency;
                 $vSecureKey = $customer->secure_key;
-                
                 $payulatam->validateOrder($vCartId, $vStatus, $vAmount, 'PayU', null, array(), $vCurrency, false, $vSecureKey);
                 
                 Configuration::updateValue('PAYULATAM_CONFIGURATION_OK', true);

@@ -69,13 +69,15 @@ $vAmount = $cart->getordertotal(true);
 $vCurrency = $currency->iso_code;
 $signature = md5($vApikey . '~' . $vMerchant . '~' . $vRef . '~' . $vAmount . '~' . $vCurrency);
 
-$base = $cart_details['total_tax'] != 0 ? $cart_details['total_price_without_tax'] - $cart_details['total_shipping_tax_exc'] : 0;
+$base = $cart_details['total_tax'] != 0 ?
+        $cart_details['total_price_without_tax'] - $cart_details['total_shipping_tax_exc'] : 0;
 
 if (Configuration::get('PS_SSL_ENABLED') || (!empty($_SERVER['HTTPS']) &&
         Tools::strtolower($_SERVER['HTTPS']) != 'off')) {
     $url = method_exists('Tools', 'getShopDomainSsl') ?
             'https://' . Tools::getShopDomainSsl() . __PS_BASE_URI__ . '/modules/' .
-            $payulatam->name . '/' : 'https://' . $_SERVER['HTTP_HOST'] . __PS_BASE_URI__ . 'modules/' . $payulatam->name . '/';
+            $payulatam->name . '/' : 'https://' . $_SERVER['HTTP_HOST'] .
+            __PS_BASE_URI__ . 'modules/' . $payulatam->name . '/';
 } else {
     $url = 'http://' . $_SERVER['HTTP_HOST'] . __PS_BASE_URI__ . '/modules/' . $payulatam->name . '/';
 }

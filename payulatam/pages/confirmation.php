@@ -108,7 +108,6 @@ if (Tools::strtoupper($signature) == Tools::strtoupper($signature_md5)) {
                 $vcAmount = (float)$cart->getordertotal(true);
                 $vcCurrency = (int)$currency_cart->id;
                 $vcKey = $customer->secure_key;
-                
                 $payulatam->validateOrder($vcCartId, $vcStatus, $vcAmount, 'PayU Latam', null, array(), $vcCurrency, false, $vcKey);
                 Configuration::updateValue('PAYULATAM_CONFIGURATION_OK', true);
                 $order = new Order((int)Order::getOrderByCartId($cart->id));
@@ -118,7 +117,8 @@ if (Tools::strtoupper($signature) == Tools::strtoupper($signature_md5)) {
                     $product_id = $product['product_id'];
                     $product_attribute_id = $product['product_attribute_id'];
                     $product_quantity = +(int)$product['product_quantity'];
-                    StockAvailable::updateQuantity($product_id, $product_attribute_id, $product_quantity, $order->id_shop);
+                    $id_shop = $order->id_shop;
+                    StockAvailable::updateQuantity($product_id, $product_attribute_id, $product_quantity, $id_shop);
                 }
             }
         }
