@@ -25,7 +25,6 @@
 
 include(dirname(__FILE__) . '/../../config/config.inc.php');
 include(dirname(__FILE__) . '/../../init.php');
-
 include_once(_PS_MODULE_DIR_ . '/payulatam/payulatam.php');
 
 class PayUController extends FrontController
