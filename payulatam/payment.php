@@ -77,12 +77,14 @@ class PayUController extends FrontController
         
         $token = md5($tknApiKey . '~' . $tknMerchant . '~' . $ref . '~' . $tknAmount . '~' . $tknCurrency);
 
+        
+        
         $params = array(
             array('value' => (Configuration::get('PAYU_DEMO') == 'yes' ? 1 : 0), 'name' => 'test'),
             array('value' => Tools::safeOutput(Configuration::get('PAYU_MERCHANT_ID')), 'name' => 'merchantId'),
             array('value' => $ref, 'name' => 'referenceCode'),
-            array('value' => Tools::substr(Configuration::get('PS_SHOP_NAME') .
-                    ' Order', 0, 255), 'name' => 'description'),
+            array('value' => Tools::substr(Configuration::get('PS_SHOP_NAME') . ' Order', 0, 255),
+                'name' => 'description'),
             array('value' => (float)self::$cart->getOrderTotal(), 'name' => 'amount'),
             array('value' => Tools::safeOutput($customer->email), 'name' => 'buyerEmail'),
             array('value' => (float)$tax, 'name' => 'tax'),
