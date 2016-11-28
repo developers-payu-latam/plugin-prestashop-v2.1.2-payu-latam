@@ -103,12 +103,13 @@ if (Tools::strtoupper($signature) == Tools::strtoupper($signature_md5)) {
                 Context::getContext()->customer = $customer;
                 Context::getContext()->currency = $currency_cart;
                 
-                $vcCartId = (int)$cart->id;
-                $vcStatus = (int)Configuration::get($state);
+                $vcCrt = (int)$cart->id;
+                $vcState = (int)Configuration::get($state);
                 $vcAmount = (float)$cart->getordertotal(true);
-                $vcCurrency = (int)$currency_cart->id;
+                $vcCurr = (int)$currency_cart->id;
                 $vcKey = $customer->secure_key;
-$payulatam->validateOrder($vcCartId, $vcStatus, $vcAmount, 'PayU Latam', null, array(), $vcCurrency, false, $vcKey);
+                $vcStr = 'PayU Latam';
+                $payulatam->validateOrder($vcCrt, $vcState, $vcAmount, $vcStr, null, array(), $vcCurr, false, $vcKey);
                 Configuration::updateValue('PAYULATAM_CONFIGURATION_OK', true);
                 $order = new Order((int)Order::getOrderByCartId($cart->id));
             }
