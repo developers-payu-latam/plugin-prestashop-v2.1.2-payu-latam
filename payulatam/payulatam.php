@@ -157,8 +157,8 @@ class PayuLatam extends PaymentModule
                         Tools::safeOutput(Configuration::get('PAYU_LATAM_MERCHANT_ID'))),
                     'type' => 'text',
                     'label' => $this->l('Merchant'),
-                    'desc' => $this->l('You will find the Merchant ID in the section "Technical Information"') .
-                    '<br>' . $this->l('of the Administrative Module.'),
+                    'desc' => $this->l('You will find the Merchant ID in the section Technical Information') .
+                    $this->l(' of the Administrative Module.'),
                 ),
                 'api_key' => array(
                     'name' => 'api_key',
@@ -167,8 +167,8 @@ class PayuLatam extends PaymentModule
                         Tools::safeOutput(Configuration::get('PAYU_LATAM_API_KEY'))),
                     'type' => 'text',
                     'label' => $this->l('Api Key'),
-                    'desc' => $this->l('You will find the API Key in the section "Technical Information"') .
-                    '<br>' . $this->l('of the Administrative Module.'),
+                    'desc' => $this->l('You will find the API Key in the section Technical Information') .
+                    $this->l(' of the Administrative Module.'),
                 ),
                 'account_id' => array(
                     'name' => 'account_id',
@@ -177,8 +177,8 @@ class PayuLatam extends PaymentModule
                         (int)Configuration::get('PAYU_LATAM_ACCOUNT_ID')),
                     'type' => 'text',
                     'label' => $this->l('Account ID'),
-                    'desc' => $this->l('You will find the Account ID in the section "Account"') .
-                    '<br>' . $this->l('of the Administrative Module.'),
+                    'desc' => $this->l('You will find the Account ID in the section Account') .
+                    $this->l(' of the Administrative Module.'),
                 ),
                 'test' => array(
                     'name' => 'test',

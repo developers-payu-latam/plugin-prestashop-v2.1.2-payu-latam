@@ -75,17 +75,17 @@ $base = $cart_details['total_tax'] != 0 ?
 if (Configuration::get('PS_SSL_ENABLED') || (!empty($_SERVER['HTTPS']) &&
         Tools::strtolower($_SERVER['HTTPS']) != 'off')) {
     $url = method_exists('Tools', 'getShopDomainSsl') ?
-            'https://' . Tools::getShopDomainSsl() . __PS_BASE_URI__ . '/modules/' .
+            'https://' . Tools::getShopDomainSsl() . __PS_BASE_URI__ . 'modules/' .
             $payulatam->name . '/' : 'https://' . $_SERVER['HTTP_HOST'] .
             __PS_BASE_URI__ . 'modules/' . $payulatam->name . '/';
 } else {
-    $url = 'http://' . $_SERVER['HTTP_HOST'] . __PS_BASE_URI__ . '/modules/' . $payulatam->name . '/';
+    $url = 'http://' . $_SERVER['HTTP_HOST'] . __PS_BASE_URI__ . 'modules/' . $payulatam->name . '/';
 }
 
 ?>
 
 <center>
-    <img src="<?php echo $url; ?>img/logo.png" height="50" width="135"/>
+    <img src="<?php echo $url; ?>views/img/logo.png" height="50" width="135"/>
     </br>
     <?php echo $payulatam->l('You will redirect to gateway PayU'); ?>
 </center>
