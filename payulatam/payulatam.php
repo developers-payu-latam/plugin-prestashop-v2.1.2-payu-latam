@@ -201,7 +201,7 @@ class PayuLatam extends PaymentModule
         }
         
         $this->context->smarty->assign(array(
-            'css' => '../modules/payulatam/views/css/',
+            'css' => 'modules/' . $this->name . '/views/css/',
             'module_dir' => _PS_MODULE_DIR_ . $this->name . '/'
         ));
 

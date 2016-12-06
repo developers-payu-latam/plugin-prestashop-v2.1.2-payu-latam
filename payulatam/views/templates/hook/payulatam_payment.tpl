@@ -23,11 +23,10 @@
 *}
 <link href="{$css|escape:'htmlall':'UTF-8'}payu.css" rel="stylesheet" type="text/css">
 <div class="row">
-	<div class="col-xs-12 col-md-6">
+	<div class="col-xs-12">
 		<p class="payment_module">
 			<a href="{$module_dir|escape:'htmlall':'UTF-8'}validation.php" class="link-redirect">                            
-				{l s='Pay by PayU' mod='payulatam'}
-                                <img src="http://www.payulatam.com/logos/logo.php?l=121&c=56d9bb0300226" alt="PayU Latam" border="0" />
+				{l s='Pay by PayU' mod='payulatam'}                                
 			</a>
 		</p>
 	</div>
