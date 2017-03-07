@@ -257,7 +257,7 @@ class PayuLatam extends PaymentModule
             $order_state->invoice = false;
             
             if ($order_state->add()) {
-                $source = dirname(__FILE__) . '/views/img/logo.jpg';
+                $source = dirname(__FILE__) . '/views/img/logo.png';
                 $destination = dirname(__FILE__) . '/../../views/img/os/' . (int)$order_state->id . '.gif';
                 copy($source, $destination);
             }
@@ -279,7 +279,7 @@ class PayuLatam extends PaymentModule
             $order_state->invoice = false;
 
             if ($order_state->add()) {
-                $source = dirname(__FILE__) . '/views/img/logo.jpg';
+                $source = dirname(__FILE__) . '/views/img/logo.png';
                 $destination = dirname(__FILE__) . '/../../views/img/os/' . (int)$order_state->id . '.gif';
                 copy($source, $destination);
             }
@@ -301,7 +301,7 @@ class PayuLatam extends PaymentModule
             $order_state->invoice = false;
 
             if ($order_state->add()) {
-                $source = dirname(__FILE__) . '/views/img/logo.jpg';
+                $source = dirname(__FILE__) . '/views/img/logo.png';
                 $destination = dirname(__FILE__) . '/../../views/img/os/' . (int)$order_state->id . '.gif';
                 copy($source, $destination);
             }
